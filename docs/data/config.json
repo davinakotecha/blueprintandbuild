@@ -1,0 +1,17 @@
+{
+  "siteName": "Blueprint & Build",
+  "siteUrl": "",
+  "practiceRepoUrl": "",
+  "slack": {
+    "teamId": "",
+    "channelId": "",
+    "channelName": "blueprint-and-build"
+  },
+  "defaultMode": "standard",
+  "features": {
+    "slackForm": false,
+    "slackLinks": false,
+    "practiceRepoSync": false,
+    "sampleContent": true
+  }
+}

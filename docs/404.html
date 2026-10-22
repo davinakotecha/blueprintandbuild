@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The server answers a missing address like /a/b/c with this file, so relative asset paths would resolve
+     against the missing path. <base href="/"> pins them to the site root. Under a GitHub Pages sub-path the
+     base must be that sub-path (a Stage 2 build step); see docs/DECISIONS.md. -->
+<base href="/">
+<title>Page not found | Blueprint &amp; Build</title>
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/effects.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/switch.css">
+<script src="js/mode-boot.js"></script>
+</head>
+<body class="has-grain">
+<header data-site-header class="glass site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head">
+      <!-- SLOT creative-dev (404 scene): particles scatter into the headline below. Mount into [data-scene-404]; the text stays as the fallback. -->
+      <div data-scene-404 aria-hidden="true"></div>
+      <p class="eyebrow">Error 404</p>
+      <h1 class="display">This MVP hasn’t been built yet.</h1>
+      <p class="lede">The page you asked for is not here. If it is something you wish existed, send it in as an idea.</p>
+      <div class="btn-row">
+        <a class="btn" href="submit.html">Submit it as an idea <span aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="index.html">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer data-site-footer class="site-footer"></footer>
+
+<script type="module" src="js/layout.js"></script>
+</body>
+</html>

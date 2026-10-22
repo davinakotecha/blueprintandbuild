@@ -1,0 +1,303 @@
+/*
+ * effects.css  (owner: design-system)
+ *
+ * Layout and visual effects shared by every page: .bento, .surface, .glass, the grain overlay, the custom
+ * cursor, the tier overrides and the reduced-motion rules. Every effect has a fallback, and a page with no
+ * data-tier yet (before tier.js has run) looks like the static tier: solid surfaces, no blur, no grain,
+ * no custom cursor, no motion. The tier then upgrades it. Every colour, size and duration is a variable
+ * from tokens.css.
+ *
+ * Tier meaning (docs/PLAN.md, "Three device tiers"):
+ *   full    glass blur, grain, custom cursor, all motion
+ *   lite    solid panels, no grain, no custom cursor, lighter motion
+ *   static  solid panels, no grain, no custom cursor, fades only (reduced motion or no WebGL lands here)
+ *
+ * References
+ *   docs/PLAN.md, "Front-end experience": bento grid, frosted glass, grain and custom cursor, each with a fallback.
+ *   IBM Design Language, Animation: https://ibm.com/design/language/animation/overview/ (cited by docs/PLAN.md);
+ *   productive motion for everyday UI, expressive for hero and headlines. The durations and curves are in tokens.css.
+ *   WCAG 2.1 SC 1.4.3 (text contrast), 2.3.3-style motion reduction and 2.4.7 (focus visible) drive the rules below.
+ */
+
+/* ------------------------------------------------------------------ bento
+ * One column on phones; six columns from 48rem. A direct child with no span class takes 2 columns (three
+ * across). Use .span-2, .span-3, .span-6 and .row-2 on the children; on phones they are ignored. Children of
+ * .bento can be .surface, .glass or the .card from components.css.
+ */
+.bento {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--bento-gap);
+}
+
+.bento > * {
+  min-inline-size: 0;
+}
+
+@media (min-width: 48rem) {
+  .bento {
+    grid-template-columns: repeat(6, minmax(0, 1fr));
+  }
+
+  .bento > * {
+    grid-column: span 2;
+  }
+
+  .bento > .span-2 {
+    grid-column: span 2;
+  }
+
+  .bento > .span-3 {
+    grid-column: span 3;
+  }
+
+  .bento > .span-6 {
+    grid-column: span 6;
+  }
+
+  .bento > .row-2 {
+    grid-row: span 2;
+  }
+}
+
+/* ------------------------------------------------------------------ surface and glass
+ * .surface is a solid card surface with a border.
+ * .glass is a frosted panel. Its base state is solid (--surface); the translucent fill and blur apply
+ * only in the full tier, and only where backdrop-filter exists. The translucent fill (--glass) is opaque enough that
+ * --text and --text2 keep at least 4.5:1 over the worst backdrop (pure black or pure white) in all three modes;
+ * accent-text, accent2-text and eyebrow-text keep it over --bg and --surface. scripts/tokens.mjs --report prints the
+ * numbers and fails if a mode ever drops under. Do not put text in a colour other than those on .glass.
+ * Form fields inside either use --bg so they stand out from the card.
+ */
+.surface,
+.glass {
+  position: relative;
+  padding: var(--space-6);
+  background: var(--surface);
+  color: var(--text);
+  border: var(--border) solid var(--line);
+  --field-bg: var(--bg);
+}
+
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  html[data-tier='full'] .glass {
+    background: var(--glass);
+    -webkit-backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    backdrop-filter: blur(var(--glass-blur)) saturate(var(--glass-saturate));
+    box-shadow: 0 var(--space-3) var(--space-7) var(--shadow);
+  }
+}
+
+/* The visitor asked for less transparency: back to the solid fill. */
+@media (prefers-reduced-transparency: reduce) {
+  html[data-tier='full'] .glass {
+    background: var(--surface);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+}
+
+/* Forced colours (Windows high contrast): system colours, no blur. */
+@media (forced-colors: active) {
+  .surface,
+  .glass,
+  html[data-tier='full'] .glass {
+    background: Canvas;
+    color: CanvasText;
+    border-color: CanvasText;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    box-shadow: none;
+  }
+}
+
+/* ------------------------------------------------------------------ grain
+ * Put class="has-grain" on <body>. A fixed film-grain layer over the page, from an inline SVG noise (no
+ * image file). It is not part of the contrast numbers, so it stays faint (--grain-opacity). Full tier only: the
+ * lite and static tiers, a page with no tier yet, and reduced motion all get no grain.
+ */
+html[data-tier='full'] body.has-grain::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-grain);
+  pointer-events: none;
+  opacity: var(--grain-opacity);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml;utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: var(--grain-size) var(--grain-size);
+}
+
+/* ------------------------------------------------------------------ custom cursor
+ * Markup (added by creative-dev's script, both aria-hidden):
+ *   <div class="cursor" aria-hidden="true"></div>       the ring
+ *   <div class="cursor-dot" aria-hidden="true"></div>   the dot
+ * The script sets --cursor-x and --cursor-y (px, viewport coordinates) on each element and toggles the
+ * states .is-hover (over something clickable), .is-down (pressed) and .is-hidden (pointer left the window). It sets
+ * <html data-cursor="on"> once it has mounted, and only in the full tier.
+ *
+ * Shown only when all of these hold: data-cursor="on", full tier, a precise hover pointer (mouse or
+ * trackpad, not touch) and forced colours off. Everywhere else the native cursor stays, and the two elements stay
+ * display:none. The native cursor is hidden only inside this block, so if the script never runs nothing is lost.
+ * Nothing here touches outlines: keyboard focus rings stay exactly as base.css draws them.
+ */
+.cursor,
+.cursor-dot {
+  display: none;
+  position: fixed;
+  inset: 0 auto auto 0;
+  z-index: var(--z-cursor);
+  pointer-events: none;
+  border-radius: var(--radius-pill);
+  translate: var(--cursor-x, -100px) var(--cursor-y, -100px);
+}
+
+.cursor {
+  inline-size: var(--cursor-ring);
+  block-size: var(--cursor-ring);
+  margin: calc(var(--cursor-ring) / -2) 0 0 calc(var(--cursor-ring) / -2);
+  border: var(--border-strong) solid var(--accent);
+  box-shadow: 0 0 0 var(--border) var(--bg);
+  scale: var(--cursor-scale, 1);
+  transition:
+    scale var(--dur-moderate) var(--ease-expressive),
+    background-color var(--dur-moderate) var(--ease-productive),
+    opacity var(--dur-fast) var(--ease-productive);
+}
+
+.cursor-dot {
+  inline-size: var(--cursor-dot);
+  block-size: var(--cursor-dot);
+  margin: calc(var(--cursor-dot) / -2) 0 0 calc(var(--cursor-dot) / -2);
+  background: var(--accent);
+  box-shadow: 0 0 0 var(--border-strong) var(--bg);
+  transition: opacity var(--dur-fast) var(--ease-productive);
+}
+
+.cursor.is-hover {
+  --cursor-scale: var(--cursor-scale-hover);
+  background: color-mix(in srgb, var(--accent) 16%, transparent);
+}
+
+.cursor.is-down {
+  --cursor-scale: var(--cursor-scale-down);
+}
+
+.cursor.is-hidden,
+.cursor-dot.is-hidden {
+  opacity: 0;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  @supports (translate: 1px 1px) {
+    html[data-tier='full'][data-cursor='on'] .cursor,
+    html[data-tier='full'][data-cursor='on'] .cursor-dot {
+      display: block;
+    }
+
+    html[data-tier='full'][data-cursor='on'] * {
+      cursor: none;
+    }
+
+    /* Text fields keep the native text cursor so people can see where they are typing. */
+    html[data-tier='full'][data-cursor='on'] :is(input, textarea, select, [contenteditable='true']) {
+      cursor: auto;
+    }
+
+    /* The same ring as base.css, restated so no cursor rule above can ever hide it. */
+    html[data-tier='full'][data-cursor='on'] :focus-visible {
+      outline: var(--focus-width) solid var(--focus);
+      outline-offset: var(--focus-offset);
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .cursor,
+  .cursor-dot {
+    display: none !important;
+  }
+
+  html[data-cursor='on'] * {
+    cursor: auto;
+  }
+}
+
+/* ------------------------------------------------------------------ tier overrides
+ * The tier is set on <html data-tier> by site/js/tier.js and can only fall: full, lite, static.
+ * Components read --fx-shift and --fx-tilt for any movement or tilt, so they follow the tier without extra rules.
+ */
+[data-tier='lite'],
+[data-tier='static'] {
+  --glass-blur: 0px;
+  --glass-saturate: 1;
+  --grain-opacity: 0;
+  --fx-tilt: 0deg;
+}
+
+[data-tier='static'] {
+  --fx-shift: 0px;
+}
+
+[data-tier='lite'] .cursor,
+[data-tier='lite'] .cursor-dot,
+[data-tier='static'] .cursor,
+[data-tier='static'] .cursor-dot {
+  display: none;
+}
+
+[data-tier='lite'] body.has-grain::after,
+[data-tier='static'] body.has-grain::after {
+  content: none;
+}
+
+/* Static tier: pages change instantly. (The browser's cross-document view transition is skipped.) */
+html[data-tier='static']::view-transition-group(*),
+html[data-tier='static']::view-transition-old(*),
+html[data-tier='static']::view-transition-new(*) {
+  animation: none;
+}
+
+/* ------------------------------------------------------------------ reduced motion
+ * Animations and transitions finish in 0.01ms rather than being switched off, so animationend and
+ * transitionend still fire for any script that waits on them. Scrolling is instant and view transitions are
+ * skipped. The cursor and grain are full-tier only, and tier.js puts reduced-motion visitors in the static
+ * tier; the rules here repeat that so the result does not depend on the script.
+ *
+ * An element that must keep a short opacity fade (the mode-switch overlays for Owen and Davina) carries
+ * data-motion="fade" and keeps its own durations. Only opacity may change in such a fade: no movement, no
+ * flashing. Scroll-driven reveals (animation-timeline: view()) belong inside
+ * @media (prefers-reduced-motion: no-preference), so content simply appears here.
+ */
+@media (prefers-reduced-motion: reduce) {
+  *:not([data-motion='fade']),
+  *:not([data-motion='fade'])::before,
+  *:not([data-motion='fade'])::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    transition-delay: 0s !important;
+    scroll-behavior: auto !important;
+  }
+
+  ::view-transition-group(*),
+  ::view-transition-old(*),
+  ::view-transition-new(*) {
+    animation: none;
+  }
+
+  body.has-grain::after {
+    content: none;
+  }
+
+  .cursor,
+  .cursor-dot {
+    display: none !important;
+  }
+
+  html[data-cursor='on'] * {
+    cursor: auto;
+  }
+}

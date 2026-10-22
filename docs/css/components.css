@@ -1,0 +1,287 @@
+/*
+ * components.css (frontend-builder). Buttons, tags, cards, stat blocks, the phase bar, the avatar and the small
+ * helpers pages share. Colours are variables only (tokens.css); text on a fill uses --on-accent, accent text
+ * uses --accent-text. Every control is at least --touch-target (44px) tall. Focus rings come from base.css.
+ */
+
+/* ------------------------------------------------------------------ buttons
+ * Works on <a> and <button>. Primary = accent fill; --ghost = outline. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  min-block-size: var(--control-height);
+  min-inline-size: var(--touch-target);
+  padding: var(--space-3) var(--space-5);
+  background: var(--accent);
+  color: var(--on-accent);
+  border: var(--border) solid var(--accent);
+  font-size: var(--fs-body-compact-02);
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-productive), border-color var(--dur-fast) var(--ease-productive);
+}
+
+.btn:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  text-decoration: none;
+}
+
+.btn:active {
+  background: var(--accent-active);
+  border-color: var(--accent-active);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--text2);
+}
+
+.btn--ghost:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  border-color: var(--text);
+}
+
+.btn--ghost:active {
+  background: color-mix(in srgb, var(--text) 16%, transparent);
+}
+
+/* A control that is not available yet: reads as plain text, not as a button. */
+.btn-note {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+/* ------------------------------------------------------------------ tags
+ * Two label styles from the mock. --tag-* and --tag2-* are checked for AA by tokens.mjs. */
+.tag {
+  display: inline-block;
+  margin-block-end: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tag--b {
+  background: var(--tag2-bg);
+  color: var(--tag2-text);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+.tag-list li {
+  margin: 0;
+}
+
+.tag-list .tag {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ card
+ * A surface with the mock's padding and heading. Put .card on .glass or .surface children of .bento. */
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+  background: var(--surface);
+  color: var(--text);
+  border: var(--border) solid var(--line);
+  --field-bg: var(--bg);
+}
+
+.card > :last-child {
+  margin-block-end: 0;
+}
+
+/* Cards are flex columns; a lone tag must not stretch across the card. */
+.card > .tag {
+  align-self: flex-start;
+}
+
+.card h3 {
+  margin-block-end: var(--space-3);
+}
+
+.card p {
+  color: var(--text2);
+  font-size: var(--fs-body-compact-02);
+}
+
+.card--accent {
+  border-color: var(--accent);
+}
+
+.card__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  margin-block-start: auto;
+  padding-block-start: var(--space-5);
+}
+
+/* A block of copyable text (an example prompt, an install command). Use with .mono. */
+.code-block {
+  padding: var(--space-4);
+  background: var(--bg);
+  border: var(--border) solid var(--line);
+  color: var(--text2);
+  font-size: var(--fs-code-01);
+  line-height: var(--lh-code-01);
+  overflow-wrap: anywhere;
+}
+
+.card .code-block {
+  font-size: var(--fs-code-01);
+}
+
+/* Small mono lines inside a card: a label above a block, or a line of facts. */
+.card .card__label,
+.card .card__meta {
+  margin-block: 0 var(--space-3);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.04em;
+}
+
+.card .card__label {
+  margin-block-start: var(--space-3);
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ stat block */
+.stat {
+  padding: var(--space-6) var(--space-5);
+}
+
+.stat__value {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-productive-heading-06);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.stat__label {
+  margin: var(--space-3) 0 0;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stat__note {
+  color: var(--text2);
+  font-size: var(--fs-label-01);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+/* ------------------------------------------------------------------ phase stepper
+ * <ol class="phases"> with one <li> per phase, one per row at every width (labels are long, the number of phases
+ * is whatever cycle.json lists). A bar down the inline-start edge: grey = to come, accent = done, accent + bold
+ * --text = now. The current one has aria-current="step" and .is-on. */
+.phases {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  margin: var(--space-5) 0 var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.phases li {
+  min-inline-size: 0;
+  margin: 0;
+  padding: var(--space-2) 0 var(--space-2) var(--space-4);
+  border-inline-start: var(--space-2) solid var(--line-strong);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  line-height: 1.3;
+}
+
+.phases li.is-done,
+.phases li.is-on {
+  border-inline-start-color: var(--accent);
+}
+
+.phases li.is-on {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* The phase's date range, under its label. --text2 on every state (the current label is --text). */
+.phases .phase__dates {
+  display: block;
+  margin-block-start: var(--space-2);
+  color: var(--text2);
+  font-weight: 400;
+}
+
+/* ------------------------------------------------------------------ avatar */
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--touch-target);
+  block-size: var(--touch-target);
+  overflow: hidden;
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+}
+
+.avatar img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+/* ------------------------------------------------------------------ small helpers */
+.card a:not(.btn) {
+  color: var(--accent-text);
+}
+
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+}
+
+.placeholder-note {
+  color: var(--text2);
+  font-size: var(--fs-body-compact-02);
+}

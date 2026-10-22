@@ -1,0 +1,16 @@
+[
+  {
+    "id": "builder-one",
+    "name": "Builder one",
+    "role": "Builder",
+    "initials": "B1",
+    "blurb": "Placeholder card. Real names, roles, photos and Slack IDs come from the private file content/builders.local.json."
+  },
+  {
+    "id": "builder-two",
+    "name": "Builder two",
+    "role": "Builder",
+    "initials": "B2",
+    "blurb": "Placeholder card. Real names, roles, photos and Slack IDs come from the private file content/builders.local.json."
+  }
+]

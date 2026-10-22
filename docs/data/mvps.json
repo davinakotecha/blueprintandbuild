@@ -1,0 +1,22 @@
+[
+  {
+    "id": "2026-10-mvp-zero",
+    "title": "MVP #0: idea to one-page brief",
+    "problem": "A good idea often stalls because nobody has time to write it up. This Claude skill turns a rough idea into a one-page MVP brief: the problem, who it is for, a five-minute demo and what is out of scope.",
+    "type": "skill",
+    "status": "live",
+    "tags": [
+      "Claude skill",
+      "Productivity",
+      "Sample"
+    ],
+    "sample": true,
+    "cycle": 0,
+    "ideaOwner": "Sample data",
+    "builders": [
+      "Builder one",
+      "Builder two"
+    ],
+    "download": "downloads/2026-10-mvp-zero.zip"
+  }
+]

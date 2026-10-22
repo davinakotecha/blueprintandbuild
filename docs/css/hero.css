@@ -1,0 +1,106 @@
+/*
+ * hero.css: the Home hero's artwork. Loaded after components.css and before home.css, on Home only.
+ *
+ * .hero-art sits at the back of .hero (z-index 0; the text is above it) and is the base layer for every tier:
+ *   - a soft radial glow from --glow,
+ *   - a scatter of dots in --dot and --dot2 (alpha masks filled with the mode colours, so they follow the mode).
+ * In the full and lite tiers hero-boot.js adds a WebGL canvas after load; once it is live
+ * (.hero-art[data-state="live"]) the CSS dots fade out and the canvas takes over. Static tier: this is the hero.
+ *
+ * Text stays readable: the dots never sit behind the text column. On wide screens (66rem and up) they start to
+ * the right of the lede (the wrap padding plus 40rem) and fade in over 8rem. On phones and tablets they live in
+ * a band of --hero-band pixels along the bottom edge, which is the hero's bottom padding. Raise --hero-band if the
+ * hero gets more bottom padding. hero.js reads the same variable, so the WebGL art keeps to the same places.
+ *
+ * Colours come from tokens.css variables only. The dot scatters are generated alpha masks (see
+ * scripts in the build notes), so the data URIs hold no colours.
+ */
+
+.hero-art {
+  --hero-band: 88; /* px (unitless so calc() can use it): the strip along the bottom edge kept for the art, inside the hero's bottom padding (6rem = 96px below 66rem, set in home.css) */
+  --hero-fade: linear-gradient(
+    to bottom,
+    transparent calc(100% - var(--hero-band) * 1px),
+    var(--bg) calc(100% - var(--hero-band) * 1px + 8px)
+  );
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+  background: radial-gradient(ellipse 70% 60% at 50% 100%, var(--glow), transparent);
+}
+
+.hero-art::before,
+.hero-art::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  opacity: 0.9;
+  transition: opacity var(--dur-slow) var(--ease-productive);
+  mask-repeat: repeat-x;
+  mask-size: auto calc(var(--hero-band) * 1px);
+  mask-position: 0 100%;
+}
+
+.hero-art::before {
+  background: var(--dot);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 60'%3E%3Ccircle cx='212' cy='31' r='1.9' opacity='0.63'/%3E%3Ccircle cx='114' cy='40' r='1.2' opacity='0.58'/%3E%3Ccircle cx='308' cy='33' r='2.0' opacity='0.49'/%3E%3Ccircle cx='7' cy='24' r='2.9' opacity='0.66'/%3E%3Ccircle cx='317' cy='52' r='1.6' opacity='0.89'/%3E%3Ccircle cx='373' cy='45' r='3.0' opacity='0.52'/%3E%3Ccircle cx='432' cy='23' r='2.8' opacity='0.35'/%3E%3Ccircle cx='57' cy='23' r='2.1' opacity='0.58'/%3E%3Ccircle cx='55' cy='24' r='1.3' opacity='0.69'/%3E%3Ccircle cx='294' cy='24' r='2.8' opacity='0.74'/%3E%3Ccircle cx='159' cy='32' r='1.5' opacity='0.93'/%3E%3Ccircle cx='473' cy='13' r='1.3' opacity='0.93'/%3E%3Ccircle cx='150' cy='46' r='1.7' opacity='0.88'/%3E%3Ccircle cx='136' cy='42' r='1.6' opacity='0.87'/%3E%3Ccircle cx='0' cy='7' r='1.0' opacity='0.68'/%3E%3Ccircle cx='420' cy='21' r='2.3' opacity='0.94'/%3E%3Ccircle cx='394' cy='14' r='2.3' opacity='0.65'/%3E%3Ccircle cx='138' cy='30' r='2.3' opacity='0.63'/%3E%3Ccircle cx='258' cy='33' r='1.4' opacity='0.81'/%3E%3Ccircle cx='54' cy='33' r='1.7' opacity='0.47'/%3E%3Ccircle cx='378' cy='18' r='1.5' opacity='0.49'/%3E%3Ccircle cx='478' cy='39' r='2.1' opacity='0.60'/%3E%3Ccircle cx='10' cy='44' r='2.0' opacity='0.72'/%3E%3Ccircle cx='439' cy='53' r='2.9' opacity='0.50'/%3E%3Ccircle cx='191' cy='29' r='3.1' opacity='0.80'/%3E%3Ccircle cx='96' cy='33' r='2.2' opacity='0.95'/%3E%3Ccircle cx='44' cy='28' r='3.0' opacity='0.85'/%3E%3Ccircle cx='301' cy='41' r='2.8' opacity='0.65'/%3E%3Ccircle cx='95' cy='50' r='2.3' opacity='0.43'/%3E%3Ccircle cx='179' cy='37' r='2.7' opacity='0.37'/%3E%3Ccircle cx='453' cy='45' r='2.6' opacity='0.45'/%3E%3Ccircle cx='197' cy='23' r='2.0' opacity='0.47'/%3E%3Ccircle cx='459' cy='24' r='2.9' opacity='0.63'/%3E%3Ccircle cx='362' cy='46' r='1.2' opacity='0.87'/%3E%3Ccircle cx='3' cy='6' r='2.0' opacity='0.35'/%3E%3Ccircle cx='309' cy='30' r='2.0' opacity='0.50'/%3E%3Ccircle cx='415' cy='12' r='1.0' opacity='0.89'/%3E%3Ccircle cx='481' cy='23' r='1.7' opacity='0.89'/%3E%3Ccircle cx='246' cy='26' r='1.5' opacity='0.93'/%3E%3Ccircle cx='65' cy='32' r='2.3' opacity='0.74'/%3E%3Ccircle cx='69' cy='12' r='1.1' opacity='0.84'/%3E%3Ccircle cx='58' cy='41' r='2.8' opacity='0.85'/%3E%3Ccircle cx='343' cy='20' r='1.7' opacity='0.93'/%3E%3Ccircle cx='302' cy='30' r='2.0' opacity='0.77'/%3E%3Ccircle cx='202' cy='44' r='1.1' opacity='0.63'/%3E%3Ccircle cx='381' cy='34' r='2.6' opacity='0.55'/%3E%3Ccircle cx='492' cy='12' r='1.2' opacity='0.64'/%3E%3Ccircle cx='441' cy='9' r='1.6' opacity='0.90'/%3E%3Ccircle cx='204' cy='9' r='1.7' opacity='0.67'/%3E%3C/svg%3E");
+}
+
+.hero-art::after {
+  background: var(--dot2);
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 520 60'%3E%3Ccircle cx='0' cy='27' r='1.6' opacity='0.38'/%3E%3Ccircle cx='430' cy='24' r='1.1' opacity='0.48'/%3E%3Ccircle cx='414' cy='7' r='1.3' opacity='0.70'/%3E%3Ccircle cx='416' cy='52' r='2.5' opacity='0.95'/%3E%3Ccircle cx='224' cy='18' r='2.3' opacity='0.36'/%3E%3Ccircle cx='495' cy='32' r='2.4' opacity='0.66'/%3E%3Ccircle cx='226' cy='51' r='3.1' opacity='0.61'/%3E%3Ccircle cx='264' cy='17' r='1.0' opacity='0.38'/%3E%3Ccircle cx='481' cy='11' r='3.1' opacity='0.95'/%3E%3Ccircle cx='265' cy='17' r='1.1' opacity='0.83'/%3E%3Ccircle cx='255' cy='30' r='1.2' opacity='0.73'/%3E%3Ccircle cx='479' cy='25' r='1.3' opacity='0.85'/%3E%3Ccircle cx='230' cy='42' r='0.9' opacity='0.82'/%3E%3Ccircle cx='388' cy='43' r='1.1' opacity='0.78'/%3E%3Ccircle cx='273' cy='44' r='3.1' opacity='0.67'/%3E%3Ccircle cx='170' cy='54' r='2.4' opacity='0.91'/%3E%3Ccircle cx='9' cy='30' r='1.7' opacity='0.72'/%3E%3Ccircle cx='61' cy='26' r='3.1' opacity='0.74'/%3E%3Ccircle cx='423' cy='26' r='1.9' opacity='0.77'/%3E%3Ccircle cx='138' cy='9' r='2.8' opacity='0.39'/%3E%3Ccircle cx='203' cy='27' r='2.3' opacity='0.36'/%3E%3C/svg%3E");
+}
+
+/* The WebGL canvas, added by hero.js. It fades in over the CSS dots. */
+.hero-art canvas {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-productive);
+  mask-image: var(--hero-fade);
+}
+
+.hero-art[data-state='live'] canvas {
+  opacity: 1;
+}
+
+.hero-art[data-state='live']::before,
+.hero-art[data-state='live']::after {
+  opacity: 0;
+}
+
+@media (min-width: 66rem) {
+  .hero-art {
+    /* Where the text column ends. hero.js overwrites --hero-clear with the measured value once it has mounted. */
+    --hero-clear: calc(max(0px, (100% - var(--wrap-max)) / 2) + var(--wrap-pad) + 40rem);
+    --hero-fade: linear-gradient(to right, transparent var(--hero-clear), var(--bg) calc(var(--hero-clear) + 8rem));
+    background: radial-gradient(ellipse 45% 75% at 74% 48%, var(--glow), transparent);
+  }
+
+  .hero-art::before,
+  .hero-art::after {
+    mask-repeat: no-repeat, no-repeat;
+    mask-size: cover, 100% 100%;
+    mask-position: right center, 0 0;
+    mask-composite: intersect;
+  }
+
+  .hero-art::before {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 560'%3E%3Ccircle cx='1166' cy='391' r='2.8' opacity='0.57'/%3E%3Ccircle cx='1300' cy='186' r='1.8' opacity='0.42'/%3E%3Ccircle cx='1188' cy='492' r='1.7' opacity='0.37'/%3E%3Ccircle cx='960' cy='236' r='3.4' opacity='0.68'/%3E%3Ccircle cx='1092' cy='516' r='3.3' opacity='0.36'/%3E%3Ccircle cx='808' cy='420' r='1.8' opacity='0.35'/%3E%3Ccircle cx='1235' cy='222' r='1.2' opacity='0.56'/%3E%3Ccircle cx='1118' cy='320' r='2.1' opacity='0.78'/%3E%3Ccircle cx='882' cy='221' r='2.5' opacity='0.53'/%3E%3Ccircle cx='1158' cy='98' r='2.6' opacity='0.44'/%3E%3Ccircle cx='1052' cy='56' r='2.6' opacity='0.38'/%3E%3Ccircle cx='1035' cy='141' r='2.6' opacity='0.56'/%3E%3Ccircle cx='1103' cy='241' r='2.0' opacity='0.81'/%3E%3Ccircle cx='1257' cy='464' r='1.6' opacity='0.37'/%3E%3Ccircle cx='1211' cy='290' r='2.3' opacity='0.63'/%3E%3Ccircle cx='1161' cy='432' r='1.7' opacity='0.49'/%3E%3Ccircle cx='1091' cy='320' r='1.5' opacity='0.82'/%3E%3Ccircle cx='1100' cy='218' r='2.0' opacity='0.75'/%3E%3Ccircle cx='850' cy='256' r='3.2' opacity='0.50'/%3E%3Ccircle cx='1077' cy='111' r='2.2' opacity='0.49'/%3E%3Ccircle cx='1069' cy='237' r='1.8' opacity='0.82'/%3E%3Ccircle cx='1004' cy='370' r='1.4' opacity='0.66'/%3E%3Ccircle cx='1281' cy='243' r='1.2' opacity='0.49'/%3E%3Ccircle cx='1138' cy='483' r='1.7' opacity='0.41'/%3E%3Ccircle cx='809' cy='391' r='2.1' opacity='0.38'/%3E%3Ccircle cx='1090' cy='76' r='2.1' opacity='0.42'/%3E%3Ccircle cx='837' cy='110' r='1.6' opacity='0.35'/%3E%3Ccircle cx='967' cy='352' r='3.4' opacity='0.65'/%3E%3Ccircle cx='1006' cy='347' r='1.9' opacity='0.71'/%3E%3Ccircle cx='977' cy='288' r='2.7' opacity='0.75'/%3E%3Ccircle cx='1449' cy='114' r='1.6' opacity='0.30'/%3E%3Ccircle cx='891' cy='191' r='2.7' opacity='0.51'/%3E%3Ccircle cx='1017' cy='519' r='3.4' opacity='0.36'/%3E%3Ccircle cx='953' cy='302' r='2.5' opacity='0.69'/%3E%3Ccircle cx='1306' cy='347' r='2.3' opacity='0.44'/%3E%3Ccircle cx='1204' cy='363' r='1.2' opacity='0.57'/%3E%3Ccircle cx='1045' cy='300' r='3.2' opacity='0.87'/%3E%3Ccircle cx='1157' cy='467' r='1.1' opacity='0.43'/%3E%3Ccircle cx='860' cy='277' r='1.6' opacity='0.52'/%3E%3Ccircle cx='950' cy='195' r='1.1' opacity='0.60'/%3E%3Ccircle cx='1134' cy='283' r='1.3' opacity='0.79'/%3E%3Ccircle cx='949' cy='422' r='3.1' opacity='0.50'/%3E%3Ccircle cx='987' cy='260' r='1.0' opacity='0.76'/%3E%3Ccircle cx='1304' cy='374' r='1.3' opacity='0.42'/%3E%3Ccircle cx='1332' cy='297' r='2.5' opacity='0.42'/%3E%3Ccircle cx='962' cy='456' r='3.4' opacity='0.44'/%3E%3Ccircle cx='1168' cy='155' r='3.1' opacity='0.54'/%3E%3Ccircle cx='1150' cy='517' r='3.2' opacity='0.35'/%3E%3Ccircle cx='1222' cy='230' r='2.6' opacity='0.59'/%3E%3Ccircle cx='1089' cy='459' r='3.3' opacity='0.47'/%3E%3Ccircle cx='1157' cy='397' r='3.0' opacity='0.57'/%3E%3Ccircle cx='1180' cy='349' r='1.7' opacity='0.63'/%3E%3Ccircle cx='1112' cy='52' r='1.1' opacity='0.37'/%3E%3Ccircle cx='1177' cy='94' r='1.5' opacity='0.42'/%3E%3Ccircle cx='940' cy='121' r='1.9' opacity='0.46'/%3E%3Ccircle cx='1270' cy='245' r='3.0' opacity='0.51'/%3E%3Ccircle cx='1065' cy='156' r='3.1' opacity='0.60'/%3E%3Ccircle cx='1410' cy='204' r='2.3' opacity='0.31'/%3E%3Ccircle cx='1176' cy='153' r='2.4' opacity='0.53'/%3E%3Ccircle cx='1047' cy='246' r='3.5' opacity='0.84'/%3E%3Ccircle cx='1107' cy='343' r='2.7' opacity='0.74'/%3E%3Ccircle cx='852' cy='259' r='3.3' opacity='0.50'/%3E%3Ccircle cx='1107' cy='323' r='3.0' opacity='0.79'/%3E%3Ccircle cx='877' cy='226' r='3.5' opacity='0.53'/%3E%3Ccircle cx='1153' cy='480' r='1.3' opacity='0.41'/%3E%3Ccircle cx='937' cy='281' r='3.0' opacity='0.67'/%3E%3Ccircle cx='815' cy='258' r='3.0' opacity='0.44'/%3E%3Ccircle cx='910' cy='305' r='3.2' opacity='0.60'/%3E%3Ccircle cx='883' cy='344' r='2.6' opacity='0.53'/%3E%3Ccircle cx='1225' cy='455' r='3.4' opacity='0.40'/%3E%3Ccircle cx='1300' cy='289' r='2.1' opacity='0.47'/%3E%3Ccircle cx='1174' cy='270' r='1.5' opacity='0.70'/%3E%3Ccircle cx='1135' cy='233' r='1.6' opacity='0.74'/%3E%3Ccircle cx='1215' cy='352' r='2.9' opacity='0.57'/%3E%3Ccircle cx='1438' cy='50' r='2.1' opacity='0.30'/%3E%3Ccircle cx='548' cy='53' r='1.7' opacity='0.30'/%3E%3Ccircle cx='1001' cy='281' r='2.3' opacity='0.80'/%3E%3Ccircle cx='975' cy='397' r='3.6' opacity='0.57'/%3E%3Ccircle cx='907' cy='37' r='2.1' opacity='0.32'/%3E%3Ccircle cx='989' cy='343' r='2.7' opacity='0.70'/%3E%3Ccircle cx='953' cy='219' r='3.6' opacity='0.65'/%3E%3Ccircle cx='541' cy='281' r='3.0' opacity='0.30'/%3E%3Ccircle cx='978' cy='307' r='1.6' opacity='0.74'/%3E%3Ccircle cx='1065' cy='194' r='3.1' opacity='0.70'/%3E%3Ccircle cx='969' cy='64' r='3.5' opacity='0.38'/%3E%3Ccircle cx='907' cy='245' r='2.4' opacity='0.59'/%3E%3Ccircle cx='1236' cy='323' r='3.3' opacity='0.57'/%3E%3Ccircle cx='1094' cy='521' r='1.1' opacity='0.36'/%3E%3Ccircle cx='1217' cy='78' r='3.3' opacity='0.37'/%3E%3Ccircle cx='959' cy='249' r='1.3' opacity='0.69'/%3E%3Ccircle cx='1133' cy='316' r='1.2' opacity='0.76'/%3E%3Ccircle cx='1040' cy='429' r='2.7' opacity='0.54'/%3E%3Ccircle cx='1027' cy='218' r='3.2' opacity='0.75'/%3E%3Ccircle cx='1020' cy='474' r='1.8' opacity='0.44'/%3E%3Ccircle cx='856' cy='177' r='2.9' opacity='0.45'/%3E%3Ccircle cx='1098' cy='405' r='2.6' opacity='0.59'/%3E%3Ccircle cx='888' cy='373' r='2.6' opacity='0.50'/%3E%3Ccircle cx='1102' cy='25' r='1.3' opacity='0.33'/%3E%3Ccircle cx='1026' cy='337' r='3.3' opacity='0.76'/%3E%3Ccircle cx='961' cy='309' r='3.0' opacity='0.70'/%3E%3Ccircle cx='1421' cy='257' r='3.4' opacity='0.31'/%3E%3Ccircle cx='644' cy='315' r='2.4' opacity='0.30'/%3E%3Ccircle cx='1080' cy='340' r='1.7' opacity='0.77'/%3E%3Ccircle cx='1008' cy='400' r='2.7' opacity='0.59'/%3E%3Ccircle cx='1254' cy='152' r='2.6' opacity='0.44'/%3E%3Ccircle cx='1162' cy='197' r='2.6' opacity='0.63'/%3E%3Ccircle cx='947' cy='277' r='1.2' opacity='0.68'/%3E%3Ccircle cx='1116' cy='415' r='1.4' opacity='0.56'/%3E%3Ccircle cx='1186' cy='171' r='3.5' opacity='0.55'/%3E%3Ccircle cx='1431' cy='273' r='1.7' opacity='0.31'/%3E%3Ccircle cx='1208' cy='212' r='2.2' opacity='0.59'/%3E%3Ccircle cx='809' cy='119' r='1.3' opacity='0.34'/%3E%3Ccircle cx='896' cy='388' r='2.8' opacity='0.49'/%3E%3Ccircle cx='1015' cy='88' r='3.2' opacity='0.44'/%3E%3Ccircle cx='1205' cy='327' r='3.1' opacity='0.62'/%3E%3C/svg%3E"), var(--hero-fade);
+  }
+
+  .hero-art::after {
+    mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 560'%3E%3Ccircle cx='1090' cy='289' r='2.8' opacity='0.89'/%3E%3Ccircle cx='1040' cy='196' r='2.0' opacity='0.70'/%3E%3Ccircle cx='1119' cy='292' r='2.3' opacity='0.82'/%3E%3Ccircle cx='544' cy='48' r='2.6' opacity='0.30'/%3E%3Ccircle cx='1140' cy='491' r='1.8' opacity='0.39'/%3E%3Ccircle cx='1095' cy='70' r='1.0' opacity='0.41'/%3E%3Ccircle cx='955' cy='304' r='2.6' opacity='0.69'/%3E%3Ccircle cx='1111' cy='137' r='2.9' opacity='0.54'/%3E%3Ccircle cx='1220' cy='314' r='2.4' opacity='0.60'/%3E%3Ccircle cx='858' cy='475' r='3.2' opacity='0.34'/%3E%3Ccircle cx='990' cy='497' r='1.6' opacity='0.38'/%3E%3Ccircle cx='829' cy='119' r='2.1' opacity='0.35'/%3E%3Ccircle cx='1120' cy='341' r='2.1' opacity='0.73'/%3E%3Ccircle cx='1165' cy='129' r='3.5' opacity='0.49'/%3E%3Ccircle cx='1123' cy='405' r='1.9' opacity='0.58'/%3E%3Ccircle cx='1089' cy='339' r='3.4' opacity='0.76'/%3E%3Ccircle cx='875' cy='108' r='1.4' opacity='0.38'/%3E%3Ccircle cx='797' cy='336' r='1.7' opacity='0.40'/%3E%3Ccircle cx='1137' cy='250' r='1.4' opacity='0.76'/%3E%3Ccircle cx='1066' cy='490' r='1.1' opacity='0.41'/%3E%3Ccircle cx='1280' cy='510' r='3.0' opacity='0.31'/%3E%3Ccircle cx='1274' cy='240' r='3.2' opacity='0.50'/%3E%3Ccircle cx='986' cy='380' r='2.8' opacity='0.62'/%3E%3Ccircle cx='961' cy='351' r='1.4' opacity='0.64'/%3E%3Ccircle cx='1047' cy='319' r='3.3' opacity='0.83'/%3E%3Ccircle cx='1187' cy='300' r='2.1' opacity='0.67'/%3E%3Ccircle cx='983' cy='169' r='2.7' opacity='0.59'/%3E%3Ccircle cx='1011' cy='388' r='1.5' opacity='0.62'/%3E%3Ccircle cx='1138' cy='399' r='1.6' opacity='0.58'/%3E%3Ccircle cx='1012' cy='258' r='2.2' opacity='0.81'/%3E%3Ccircle cx='1161' cy='380' r='3.2' opacity='0.60'/%3E%3Ccircle cx='756' cy='275' r='2.5' opacity='0.36'/%3E%3Ccircle cx='1232' cy='322' r='3.2' opacity='0.57'/%3E%3Ccircle cx='1036' cy='364' r='2.0' opacity='0.70'/%3E%3Ccircle cx='1181' cy='210' r='2.0' opacity='0.63'/%3E%3Ccircle cx='751' cy='242' r='3.4' opacity='0.35'/%3E%3Ccircle cx='948' cy='240' r='2.4' opacity='0.67'/%3E%3Ccircle cx='1170' cy='319' r='3.2' opacity='0.69'/%3E%3Ccircle cx='983' cy='183' r='2.8' opacity='0.62'/%3E%3Ccircle cx='1149' cy='265' r='1.7' opacity='0.75'/%3E%3Ccircle cx='1072' cy='335' r='3.0' opacity='0.78'/%3E%3Ccircle cx='544' cy='146' r='2.5' opacity='0.30'/%3E%3Ccircle cx='1143' cy='384' r='2.4' opacity='0.61'/%3E%3C/svg%3E"), var(--hero-fade);
+  }
+}
+
+/* Windows high contrast and similar: decorative art would be forced to system colours, so leave it out. */
+@media (forced-colors: active) {
+  .hero-art {
+    display: none;
+  }
+}

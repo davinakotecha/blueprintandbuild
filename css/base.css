@@ -1,0 +1,512 @@
+/*
+ * base.css  (owner: design-system)
+ *
+ * Fonts, reset, element styles and the small set of shared helpers (.wrap, .sr-only, .skip-link,
+ * .mono, .eyebrow, .display, .lede). No effects (see effects.css), no component classes (.btn,
+ * .tag, .card belong to components.css), and no colour literals: every colour, size and duration is a
+ * variable from tokens.css. Mobile-first: there are no max-width queries here.
+ *
+ * Grid: Carbon's 2x grid and 8px spacing. Vertical rhythm comes from the --space-* scale
+ * (2, 4, 8, 12, 16, 24, 32, 40, 48, 64, 80, 96, 160px); use space-3, 5, 6, 7 ... for margins and
+ * paddings and avoid raw pixel values. Touch targets are at least --touch-target (44px).
+ *
+ * References
+ *   docs/PLAN.md, "Design: IBM brand on Carbon": Plex Sans for UI and display (light weight at large
+ *   sizes), Plex Mono for code, Carbon 2x grid and 8px spacing.
+ *   IBM Design Language, Color: https://www.ibm.com/design/language/color (cited by docs/PLAN.md; Blue 60
+ *   is the core accent). The contrast ratios are computed by scripts/tokens.mjs, not taken from that page:
+ *   Blue 60 on white is 5.0:1 as text, Blue 40 is 2.35:1, which is why tokens.css has --accent-text and
+ *   --accent2-text.
+ *   Carbon type tokens (@carbon/type) set the heading and body sizes via tokens.css.
+ */
+
+/* ------------------------------------------------------------------ fonts
+ * Files are saved to site/fonts/ by scripts/vendor.mjs (woff2 only, no CDN). font-display: swap shows
+ * text in the fallback stack straight away and swaps in Plex when it has loaded.
+ */
+@font-face {
+  font-family: 'IBM Plex Sans Variable';
+  font-style: normal;
+  font-weight: 100 700;
+  font-stretch: 75% 100%;
+  font-display: swap;
+  src: url('../fonts/plex-sans-var-latin.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('../fonts/plex-mono-400.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url('../fonts/plex-mono-500.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'IBM Plex Mono';
+  font-style: normal;
+  font-weight: 600;
+  font-display: swap;
+  src: url('../fonts/plex-mono-600.woff2') format('woff2');
+}
+
+/*
+ * Axes for the kinetic headline. .display reads --display-wght (100 to 700) and --display-wdth
+ * (75 to 100). Registered as numbers so CSS can transition or animate them; script can also just set
+ * them. Browsers without @property still work: the var() fallbacks in .display give the resting values.
+ */
+@property --display-wght {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 300;
+}
+
+@property --display-wdth {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 100;
+}
+
+/* ------------------------------------------------------------------ reset */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+  tab-size: 2;
+  /* Anchor jumps clear the sticky header. */
+  scroll-padding-block-start: calc(var(--header-h) + var(--space-5));
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+body {
+  min-block-size: 100vh;
+  min-block-size: 100dvh;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: var(--fs-body-02);
+  font-weight: var(--fw-body-02);
+  line-height: var(--lh-body-02);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-inline-size: 100%;
+}
+
+img,
+video {
+  block-size: auto;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* ------------------------------------------------------------------ focus
+ * Never removed. 2px in --focus with an offset, on every interactive element. --focus has at least 3:1
+ * against --bg and --surface in all three modes (checked by scripts/tokens.mjs).
+ */
+:focus-visible {
+  outline: var(--focus-width) solid var(--focus);
+  outline-offset: var(--focus-offset);
+}
+
+@media (forced-colors: active) {
+  :focus-visible {
+    outline-color: Highlight;
+  }
+}
+
+/* ------------------------------------------------------------------ text */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  color: var(--text);
+  font-family: inherit;
+  overflow-wrap: break-word;
+  text-wrap: balance;
+  margin-block-end: var(--space-3);
+}
+
+/* Page title: Carbon fluid-heading-05, light at large sizes. */
+h1 {
+  font-size: var(--fs-fluid-heading-05);
+  font-weight: var(--fw-fluid-heading-05);
+  line-height: var(--lh-fluid-heading-05);
+  letter-spacing: -0.02em;
+  margin-block-end: var(--space-6);
+}
+
+/* Section title: Carbon fluid-heading-04. */
+h2 {
+  font-size: var(--fs-fluid-heading-04);
+  font-weight: var(--fw-fluid-heading-04);
+  line-height: var(--lh-fluid-heading-04);
+  letter-spacing: -0.01em;
+  margin-block-end: var(--space-6);
+}
+
+/* Card title: Carbon productive-heading-03 size, semibold like the reference mock. */
+h3 {
+  font-size: var(--fs-productive-heading-03);
+  font-weight: 600;
+  line-height: var(--lh-productive-heading-03);
+}
+
+h4 {
+  font-size: var(--fs-productive-heading-02);
+  font-weight: var(--fw-productive-heading-02);
+  line-height: var(--lh-productive-heading-02);
+}
+
+h5,
+h6 {
+  font-size: var(--fs-productive-heading-01);
+  font-weight: var(--fw-productive-heading-01);
+  line-height: var(--lh-productive-heading-01);
+  letter-spacing: var(--ls-productive-heading-01);
+}
+
+h6 {
+  color: var(--text2);
+}
+
+p,
+ul,
+ol,
+dl,
+blockquote,
+pre,
+figure,
+table {
+  margin-block-end: var(--space-5);
+}
+
+:is(p, ul, ol, dl, blockquote, pre, figure, table):last-child {
+  margin-block-end: 0;
+}
+
+p {
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+ul,
+ol {
+  padding-inline-start: var(--space-6);
+}
+
+li + li {
+  margin-block-start: var(--space-2);
+}
+
+strong,
+b {
+  font-weight: 600;
+}
+
+small {
+  font-size: var(--fs-caption-01);
+  line-height: var(--lh-caption-01);
+}
+
+hr {
+  border: 0;
+  border-block-start: var(--border) solid var(--line);
+  margin-block: var(--space-7);
+}
+
+blockquote {
+  padding-inline-start: var(--space-5);
+  border-inline-start: var(--border-strong) solid var(--accent);
+  color: var(--text);
+}
+
+/* Links: --accent-text, never --accent, because the palette accent can be under 4.5:1 as text. */
+a {
+  color: var(--accent-text);
+  text-decoration-line: underline;
+  text-decoration-thickness: var(--border);
+  text-underline-offset: 0.2em;
+}
+
+a:hover {
+  text-decoration-thickness: var(--border-strong);
+}
+
+summary {
+  cursor: pointer;
+}
+
+/* Code */
+code,
+kbd,
+samp,
+pre {
+  font-family: var(--font-mono);
+  font-size: var(--fs-code-02);
+  line-height: var(--lh-code-02);
+  letter-spacing: var(--ls-code-02);
+}
+
+:not(pre) > code,
+kbd {
+  padding: var(--space-1) var(--space-2);
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  border-radius: var(--radius-sm);
+  overflow-wrap: anywhere;
+}
+
+/* Give a scrolling <pre> tabindex="0" so keyboard users can scroll it. */
+pre {
+  padding: var(--space-4) var(--space-5);
+  background: var(--bg);
+  color: var(--text);
+  border: var(--border) solid var(--line);
+  overflow-x: auto;
+}
+
+pre code {
+  font: inherit;
+  letter-spacing: inherit;
+}
+
+table {
+  border-collapse: collapse;
+  inline-size: 100%;
+}
+
+th,
+td {
+  padding: var(--space-3) var(--space-4);
+  border-block-end: var(--border) solid var(--line);
+  text-align: start;
+}
+
+th {
+  font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ forms
+ * Carbon text-input pattern: a filled field with a strong bottom border. The field fill is --field-bg if
+ * something sets it, else --surface. effects.css sets --field-bg: var(--bg) inside .surface and .glass, so a
+ * field always stands out from the card it sits on. (No :root default on purpose: a var() on :root would
+ * be resolved once there and ignore a nested data-mode.)
+ */
+label {
+  color: var(--text2);
+  font-size: var(--fs-label-01);
+  line-height: var(--lh-label-01);
+  letter-spacing: var(--ls-label-01);
+}
+
+fieldset {
+  min-inline-size: 0;
+  padding: 0;
+  border: 0;
+}
+
+legend {
+  padding: 0;
+  color: var(--text2);
+  font-size: var(--fs-label-01);
+  line-height: var(--lh-label-01);
+  letter-spacing: var(--ls-label-01);
+}
+
+input:where(:not([type='checkbox'], [type='radio'], [type='range'], [type='color'], [type='file'], [type='hidden'], [type='image'], [type='submit'], [type='button'], [type='reset'])),
+select,
+textarea {
+  inline-size: 100%;
+  min-block-size: var(--touch-target);
+  padding: var(--space-3) var(--space-4);
+  background: var(--field-bg, var(--surface));
+  color: var(--text);
+  border: 0;
+  border-block-end: var(--border-strong) solid var(--line-strong);
+  border-radius: 0;
+  font-size: var(--fs-body-02);
+  line-height: var(--lh-body-02);
+}
+
+textarea {
+  min-block-size: 7.5rem;
+  resize: vertical;
+}
+
+input::placeholder,
+textarea::placeholder {
+  color: var(--text2);
+  opacity: 1;
+}
+
+input[type='checkbox'],
+input[type='radio'] {
+  inline-size: 1.25rem;
+  block-size: 1.25rem;
+  flex: none;
+  accent-color: var(--accent);
+}
+
+[aria-invalid='true'] {
+  border-block-end-color: var(--error-text);
+}
+
+:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Unstyled buttons: a reset with a 44px minimum. .btn (components.css) builds on it. */
+button,
+input[type='submit'],
+input[type='button'],
+input[type='reset'] {
+  min-block-size: var(--touch-target);
+  min-inline-size: var(--touch-target);
+  padding: 0;
+  background: none;
+  border: 0;
+  border-radius: 0;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+
+/* ------------------------------------------------------------------ helpers */
+
+/* The page container: Carbon 2x grid margins (16px on phones, 24px from 42rem, 32px from 66rem), about 1280px wide. */
+.wrap {
+  inline-size: 100%;
+  max-inline-size: var(--wrap-max);
+  margin-inline: auto;
+  padding-inline: var(--wrap-pad);
+}
+
+/* Visually hidden, still read by screen readers. */
+.sr-only {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* First focusable element on every page: <a class="skip-link" href="#main">. Hidden until focused. */
+.skip-link {
+  position: fixed;
+  inset-block-start: var(--space-3);
+  inset-inline-start: var(--space-3);
+  z-index: var(--z-skip);
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  padding: 0 var(--space-5);
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+  text-decoration: none;
+  transform: translateY(calc(-100% - var(--space-6)));
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: none;
+}
+
+.mono {
+  font-family: var(--font-mono);
+}
+
+/* Small mono label above a headline. --eyebrow-text passes 4.5:1 on --bg and --surface in every mode. */
+.eyebrow {
+  margin-block: 0 var(--space-5);
+  color: var(--eyebrow-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-eyebrow);
+  font-weight: 400;
+  line-height: var(--lh-label-01);
+  letter-spacing: var(--ls-eyebrow);
+  text-transform: uppercase;
+}
+
+/*
+ * The oversized light headline. Weight and width are the two Plex Sans Variable axes: set the
+ * custom properties --display-wght and --display-wdth (CSS or script) to animate them. Emphasis
+ * words in <b> or <strong> go to weight 700 in the accent colour. That is large text only (the
+ * accent is at least 3:1 on --bg and --surface in every mode), so keep <b> inside .display.
+ */
+.display {
+  margin-block: 0;
+  font-family: var(--font-sans);
+  font-size: var(--fs-display-kinetic);
+  font-weight: var(--display-wght, var(--fw-display-kinetic));
+  font-stretch: calc(var(--display-wdth, 100) * 1%);
+  line-height: var(--lh-display-kinetic);
+  letter-spacing: var(--ls-display-kinetic);
+  text-wrap: balance;
+}
+
+.display b,
+.display strong {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+/* The intro paragraph under a headline. */
+.lede {
+  max-inline-size: var(--measure-lede);
+  margin-block: var(--space-6) var(--space-7);
+  color: var(--text2);
+  font-size: var(--fs-lede);
+  line-height: var(--lh-lede);
+}

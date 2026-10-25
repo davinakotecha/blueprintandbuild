@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Vote | Blueprint &amp; Build</title>
+<meta name="description" content="The shortlist for this cycle and a countdown to when voting opens and closes.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/plex-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/effects.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/catalog.css">
+<link rel="stylesheet" href="css/switch.css">
+<script src="js/mode-boot.js"></script>
+</head>
+<body class="has-grain">
+<header data-site-header class="glass site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head">
+      <p class="eyebrow">Blueprint &amp; Build</p>
+      <!-- SLOT creative-dev (kinetic headline): add data-kinetic to this h1 when the shared kinetic script is ready. -->
+      <h1 class="display">Vote</h1>
+      <p class="lede">The shortlist for this cycle and a countdown to when voting opens and closes.</p>
+    </div>
+
+    <noscript><p class="notice">The shortlist and the countdown are loaded with JavaScript. Turn JavaScript on for this site to see them.</p></noscript>
+
+    <section class="vote-status surface" aria-label="Voting window">
+      <p class="vote-count" role="status" data-countdown hidden></p>
+      <p class="vote-dates"><span class="vote-dates__label">Voting window</span> <span data-vote-dates>To be confirmed</span></p>
+      <p class="vote-note" data-slack-note hidden></p>
+    </section>
+
+    <p class="notice notice--page" data-sample-note hidden>This shortlist is a sample, so you can see how the vote will look. The real shortlist replaces it after triage.</p>
+
+    <section aria-labelledby="shortlist-title">
+      <div class="section-head"><h2 id="shortlist-title">The shortlist</h2></div>
+      <div class="bento catalog-grid" data-slot="shortlist"><p class="placeholder-note">Loading the shortlist…</p></div>
+    </section>
+
+    <section aria-labelledby="how-title">
+      <div class="section-head"><h2 id="how-title">How the vote works</h2></div>
+      <ol class="how-list" data-how></ol>
+    </section>
+  </div>
+</main>
+
+<footer data-site-footer class="site-footer"></footer>
+
+<script type="module" src="js/layout.js"></script>
+<script type="module" src="js/vote.js"></script>
+</body>
+</html>

@@ -1,0 +1,134 @@
+/*
+ * scene-404.css (creative-dev): the 404 page. Loaded after components.css, before switch.css, on 404.html only.
+ *
+ * Page shell: the body is a flex column and <main> takes the spare height, so the footer sits at the bottom of the
+ * viewport on a short page (no empty strip under it) and flows normally on a long one.
+ * Scene: [data-scene-404] is an absolutely positioned stage inside <main>. CSS decides its rectangle; scene-404.js
+ * fits "This MVP hasn't been built yet" into whatever size it has. From 66rem it is the right-hand column, beside the
+ * text; below that it is a band under the buttons (--scene-band tall, reserved by the page head's bottom padding).
+ * The text never sits under the scene, so contrast does not depend on the particles.
+ * The CSS-only version (dots and an outlined 404 in the mode's colours) is the whole scene in the static tier, and
+ * the first frame in full and lite until the canvas is live ([data-state='live'] fades it out).
+ */
+
+body.page-404 {
+  display: flex;
+  flex-direction: column;
+}
+
+.page-404 main {
+  --scene-band: clamp(13rem, 62vw, 24rem);
+  position: relative;
+  flex: 1 0 auto;
+  overflow: clip;
+}
+
+.page-404 .site-footer {
+  margin-block-start: 0;
+}
+
+.page-404 .page-head {
+  position: relative;
+  z-index: 1;
+  padding-block-end: calc(var(--scene-band) + var(--space-7));
+}
+
+.page-404 .page-head .lede {
+  margin-block-end: var(--space-7);
+}
+
+.page-404 h1.display {
+  font-size: clamp(2.5rem, 9vw, 4.5rem);
+}
+
+/* ------------------------------------------------------------------ the stage */
+[data-scene-404] {
+  position: absolute;
+  z-index: 0;
+  inset: auto var(--wrap-pad) var(--space-6);
+  block-size: var(--scene-band);
+  pointer-events: none;
+}
+
+@media (min-width: 66rem) {
+  .page-404 main {
+    --scene-edge: calc(max(0px, (100% - var(--wrap-max)) / 2) + var(--wrap-pad));
+  }
+
+  .page-404 .page-head {
+    max-inline-size: 40rem;
+    padding-block-end: var(--space-9);
+  }
+
+  [data-scene-404] {
+    inset: var(--space-7) var(--scene-edge) var(--space-7) calc(var(--scene-edge) + 42rem);
+    block-size: auto;
+  }
+}
+
+/* The CSS-only version: dots in --dot and --dot2 fading out to the edges, and an outlined 404. */
+[data-scene-404]::before,
+[data-scene-404]::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transition: opacity var(--dur-slow) var(--ease-productive);
+}
+
+[data-scene-404]::before {
+  background:
+    radial-gradient(circle, var(--dot) 0 1.5px, transparent 2.2px) 0 0 / var(--space-6) var(--space-6),
+    radial-gradient(circle, var(--dot2) 0 1.2px, transparent 1.9px) calc(var(--space-6) / 2) calc(var(--space-6) / 2) / var(--space-6) var(--space-6);
+  mask-image: radial-gradient(ellipse at 50% 50%, var(--bg) 30%, transparent 100%);
+  opacity: 0.8;
+}
+
+[data-scene-404]::after {
+  content: '404';
+  display: grid;
+  place-items: center;
+  color: transparent;
+  font-family: var(--font-sans);
+  font-size: clamp(6rem, 30vw, 14rem);
+  font-weight: 200;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  -webkit-text-stroke: var(--border-strong) color-mix(in srgb, var(--dot) 75%, transparent);
+}
+
+[data-scene-404] canvas {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-productive);
+}
+
+[data-scene-404][data-state='live'] canvas {
+  opacity: 1;
+}
+
+[data-scene-404][data-state='live']::before,
+[data-scene-404][data-state='live']::after {
+  opacity: 0;
+}
+
+/* ------------------------------------------------------------------ the headline opens up (weight and width) */
+@media (prefers-reduced-motion: no-preference) {
+  @keyframes scene-axes {
+    from { --display-wght: 100; --display-wdth: 75; }
+    to { --display-wght: 300; --display-wdth: 100; }
+  }
+
+  html:not([data-tier='static']) .page-404 h1.display {
+    animation: scene-axes 1.3s var(--ease-expressive-entrance) 60ms both;
+  }
+}
+
+/* Windows high contrast: decorative art would be forced to system colours, so leave it out. */
+@media (forced-colors: active) {
+  [data-scene-404] {
+    display: none;
+  }
+}

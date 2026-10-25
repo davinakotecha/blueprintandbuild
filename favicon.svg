@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <!-- The header's cut-corner mark in IBM Blue 60. A favicon cannot read the page's CSS variables, so this one colour is
+       written here; it is the Standard accent from docs/PLAN.md. -->
+  <path fill="#0f62fe" d="M0 0h32v19.2L19.2 32H0z"/>
+</svg>

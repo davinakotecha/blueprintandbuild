@@ -1,0 +1,35 @@
+[
+  {
+    "id": "sample-lessons-learned",
+    "name": "sample-lessons-learned",
+    "title": "Sample lessons learned",
+    "description": "Reads pasted project close-out notes and groups the lessons by theme, such as planning, data and handover, with one suggested action for each.",
+    "examplePrompt": "Here are the close-out notes from our last project. Group the lessons by theme and suggest one action for each.",
+    "version": "0.1.0",
+    "builtBy": "Sample data",
+    "sample": true,
+    "download": "downloads/sample-lessons-learned.zip"
+  },
+  {
+    "id": "sample-meeting-actions",
+    "name": "sample-meeting-actions",
+    "title": "Sample meeting actions",
+    "description": "Turns pasted meeting notes into a list of actions with owners and due dates, and flags risks, assumptions, issues and dependencies for a RAID log.",
+    "examplePrompt": "Here are my notes from today's project call. List the actions with owners and due dates, then pull out anything for the RAID log.",
+    "version": "0.1.0",
+    "builtBy": "Sample data",
+    "sample": true,
+    "download": "downloads/sample-meeting-actions.zip"
+  },
+  {
+    "id": "sample-sql-explainer",
+    "name": "sample-sql-explainer",
+    "title": "Sample SQL explainer",
+    "description": "Explains a SQL query or DAX measure in plain English, step by step, for a junior consultant, and points out likely mistakes.",
+    "examplePrompt": "Explain this SQL query step by step for someone new to the team, and tell me if anything looks wrong.",
+    "version": "0.1.0",
+    "builtBy": "Sample data",
+    "sample": true,
+    "download": "downloads/sample-sql-explainer.zip"
+  }
+]

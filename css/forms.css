@@ -1,0 +1,322 @@
+/*
+ * forms.css (frontend-builder B). Reusable form pieces (field, label, hint, inline error, counter, error summary,
+ * notice box) and the Submit page layout, success state and its short CSS celebration.
+ * Colours are variables only. Every control is at least --touch-target tall; focus rings come from base.css.
+ * The celebration runs only in the full and lite tiers and never under prefers-reduced-motion.
+ */
+
+/* ------------------------------------------------------------------ page layout
+ * One column on phones: the form first, then the "what happens next" card. Two columns from 48rem. */
+.submit-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--bento-gap);
+}
+
+.submit-grid > * {
+  min-inline-size: 0;
+}
+
+@media (min-width: 48rem) {
+  .submit-grid {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr);
+    align-items: start;
+  }
+}
+
+.form-card {
+  position: relative;
+  overflow: hidden;
+}
+
+/* The "what happens next" aside carries .glass in the HTML, but sits on a flat background where the blur does nothing
+ * and the full tier's drop shadow would be on no other card. It gets the .surface look in every tier. */
+html[data-tier] .next-card.glass {
+  background: var(--surface);
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+  box-shadow: none;
+}
+
+.form-card h2,
+.next-card h2 {
+  font-size: var(--fs-productive-heading-04);
+  font-weight: 400;
+  line-height: var(--lh-productive-heading-04);
+  letter-spacing: 0;
+}
+
+.next-list {
+  display: grid;
+  gap: var(--space-5);
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  list-style: none;
+  counter-reset: next;
+}
+
+.next-list li {
+  position: relative;
+  margin: 0;
+  padding-inline-start: var(--space-8);
+  counter-increment: next;
+}
+
+.next-list li::before {
+  content: counter(next);
+  position: absolute;
+  inset-inline-start: 0;
+  inset-block-start: 0;
+  display: grid;
+  place-items: center;
+  inline-size: var(--space-6);
+  block-size: var(--space-6);
+  border: var(--border) solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+}
+
+.next-list strong {
+  display: block;
+  color: var(--text);
+  font-size: var(--fs-body-compact-02);
+}
+
+.next-list span {
+  color: var(--text2);
+  font-size: var(--fs-body-compact-01);
+}
+
+/* ------------------------------------------------------------------ fields
+ * The .field box itself (a labelled control) is in components.css; these are the parts the idea form uses. */
+.field .field__label {
+  color: var(--text);
+  font-size: var(--fs-body-compact-01);
+  font-weight: 600;
+  line-height: var(--lh-body-compact-01);
+}
+
+.field .field__optional {
+  color: var(--text2);
+  font-weight: 400;
+}
+
+.field .field__hint {
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-label-01);
+  line-height: var(--lh-label-01);
+}
+
+.field .field__foot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+}
+
+.field .field__error {
+  flex: 1 1 12rem;
+  margin: 0;
+  color: var(--error-text);
+  font-size: var(--fs-body-compact-01);
+  line-height: var(--lh-body-compact-01);
+}
+
+.field .field__error[hidden] + .field__count {
+  margin-inline-start: auto;
+}
+
+.field .field__count {
+  margin: 0 0 0 auto;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+}
+
+.field .field__count.is-near {
+  color: var(--text);
+  font-weight: 600;
+}
+
+.field .field__count.is-over {
+  color: var(--error-text);
+  font-weight: 600;
+}
+
+.field textarea {
+  min-block-size: 9rem;
+}
+
+/* A field in error keeps its text colour; the border, the message and the summary carry the state. */
+.field [aria-invalid='true'] {
+  border-block-end-width: calc(var(--border-strong) * 2);
+}
+
+/* Anything focused by script or by the summary links scrolls clear of the sticky header. */
+.error-summary,
+.idea-success h2,
+.field input,
+.field textarea {
+  scroll-margin-block: calc(var(--header-h) + var(--space-6));
+}
+
+/* ------------------------------------------------------------------ error summary */
+.error-summary {
+  margin-block-end: var(--space-6);
+  padding: var(--space-5);
+  background: var(--bg);
+  border: var(--border) solid var(--line);
+  border-inline-start: var(--space-2) solid var(--error-text);
+}
+
+.error-summary h3 {
+  margin-block-end: var(--space-3);
+  color: var(--text);
+}
+
+.error-summary ul {
+  margin: 0;
+  padding-inline-start: var(--space-5);
+}
+
+.error-summary li {
+  margin: 0;
+}
+
+.card .error-summary a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  color: var(--error-text);
+}
+
+.form-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-4) var(--space-5);
+}
+
+/* The sentence under the button that says what the button really does. */
+.form-actions + .field__hint {
+  margin-block-start: var(--space-4);
+}
+
+/* The success state: what to do next, and the by-hand fallback when the browser blocks copying. */
+.idea-success__next {
+  margin-block-end: var(--space-5);
+  color: var(--text);
+  max-inline-size: var(--measure);
+}
+
+.idea-success__message {
+  inline-size: 100%;
+  margin-block-start: var(--space-3);
+  padding: var(--space-3) var(--space-4);
+  font-family: var(--font-mono);
+  font-size: var(--fs-code-01);
+  line-height: var(--lh-code-01);
+  color: var(--text);
+  background: var(--bg);
+  border: var(--border) solid var(--line-strong);
+  resize: vertical;
+}
+
+/* The honeypot: out of sight and out of the tab order, but still in the form for bots to fill in. */
+.hp {
+  position: absolute;
+  inset-inline-start: -62.5rem;
+  inline-size: 1px;
+  block-size: 1px;
+  overflow: hidden;
+}
+
+/* ------------------------------------------------------------------ success state */
+.idea-success h2:focus {
+  outline: none; /* focus is moved here by script so the heading is read; it is not an interactive control */
+}
+
+.success-mark {
+  position: relative;
+  inline-size: var(--space-9);
+  block-size: var(--space-9);
+  margin-block-end: var(--space-5);
+  border: var(--border-strong) solid var(--success-text);
+  border-radius: var(--radius-pill);
+}
+
+.success-mark::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 36%;
+  inset-block-start: 20%;
+  inline-size: 28%;
+  block-size: 50%;
+  border: solid var(--success-text);
+  border-width: 0 var(--border-strong) var(--border-strong) 0;
+  rotate: 45deg;
+}
+
+/* ------------------------------------------------------------------ celebration
+ * Twelve decorative pieces (added to [data-celebrate] by submit.js) fly out from the tick once. Hidden unless the tier is full or lite, and never under
+ * reduced motion. In lite only every other piece shows. */
+.celebrate {
+  display: none;
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.celebrate i {
+  position: absolute;
+  inset-block-start: calc(var(--space-6) + var(--space-9) / 2 - var(--space-2));
+  inset-inline-start: calc(var(--space-6) + var(--space-9) / 2 - var(--space-2));
+  inline-size: var(--space-3);
+  block-size: var(--space-3);
+  background: var(--accent);
+  opacity: 0;
+  --r: 9rem;
+  --a: calc(var(--i) * 30deg);
+}
+
+.celebrate i:nth-child(4n + 2) { background: var(--accent2); }
+.celebrate i:nth-child(4n + 3) { background: var(--hl1); }
+.celebrate i:nth-child(4n) { background: var(--hl2); }
+.celebrate i:nth-child(even) { --r: 6rem; border-radius: var(--radius-pill); }
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-tier='full'] .celebrate,
+  html[data-tier='lite'] .celebrate {
+    display: block;
+  }
+
+  html[data-tier='lite'] .celebrate i:nth-child(even) {
+    display: none;
+  }
+
+  html[data-tier='full'] .celebrate i,
+  html[data-tier='lite'] .celebrate i {
+    animation: bb-burst 1100ms var(--ease-expressive-entrance) both;
+  }
+
+  html[data-tier='full'] .success-mark,
+  html[data-tier='lite'] .success-mark {
+    animation: bb-pop 480ms var(--ease-expressive-entrance) both;
+  }
+}
+
+@keyframes bb-burst {
+  0% { opacity: 1; transform: rotate(var(--a)) translateX(0) scale(0.4); }
+  70% { opacity: 1; }
+  100% { opacity: 0; transform: rotate(var(--a)) translateX(var(--r)) scale(1); }
+}
+
+@keyframes bb-pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}

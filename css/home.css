@@ -1,0 +1,221 @@
+/*
+ * home.css (frontend-builder). Home-only layout: hero text block, stats strip, "This cycle" cards and phase stepper,
+ * card lists. The section heading (.section-head) and the builder row (.person) are shared: components.css.
+ * Mobile first: one column on phones; the bento from 48rem (--bp-bento), three across from 66rem (--bp-lg).
+ * Colours are variables only. The hero artwork itself (.hero-art) is creative-dev's hero.css.
+ */
+
+/* ------------------------------------------------------------------ hero (text above the art) */
+.hero {
+  position: relative;
+  overflow: hidden;
+  border-block-end: var(--border) solid var(--line);
+}
+
+.hero > .wrap {
+  position: relative;
+  z-index: 1;
+}
+
+/* Bottom padding on phones and tablets is the strip the hero particles live in (--hero-band in hero.css, 88px
+ * at most), so it stays at --space-12 (96px) below 66rem. From 66rem the art sits right of the text and needs
+ * no strip, so the hero is not made taller than it was. */
+.hero__inner {
+  max-inline-size: 47.5rem;
+  padding-block: var(--space-10) var(--space-12);
+}
+
+.hero .lede {
+  margin-block: var(--space-6) var(--space-7);
+}
+
+@media (min-width: 48rem) {
+  .hero__inner {
+    padding-block: var(--space-12);
+  }
+
+  .hero .lede {
+    margin-block: var(--space-6) var(--space-8);
+  }
+}
+
+@media (min-width: 66rem) {
+  .hero__inner {
+    padding-block: var(--space-12) var(--space-11);
+  }
+}
+
+/* ------------------------------------------------------------------ stats strip
+ * Hairlines are the container's --line showing through a 1px gap; each stat sits on --bg. */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--border);
+  margin: 0;
+  background: var(--line);
+  border-block-end: var(--border) solid var(--line);
+}
+
+.stat {
+  display: flex;
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  padding: var(--space-6) var(--space-5);
+  background: var(--bg);
+}
+
+.stat__value {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-productive-heading-06);
+  font-weight: 300;
+  letter-spacing: -0.03em;
+  line-height: 1;
+}
+
+.stat__label {
+  margin: var(--space-3) 0 0;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.stat__note {
+  color: var(--text2);
+  font-size: var(--fs-label-01);
+  text-transform: none;
+  letter-spacing: 0;
+}
+
+@media (min-width: 48rem) {
+  .stats {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+
+  .stat {
+    padding: var(--space-7) var(--space-6);
+  }
+
+  .stat__value {
+    font-size: var(--fs-productive-heading-07);
+  }
+}
+
+/* ------------------------------------------------------------------ this cycle
+ * The card is a flex column (components.css), so the countdown's auto top margin pins it to the card's bottom edge
+ * and the padding keeps it clear of the stepper. */
+.cycle-now .count {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--space-3) var(--space-4);
+  margin-block: auto 0;
+  padding-block-start: var(--space-6);
+}
+
+.count__n {
+  color: var(--text);
+  font-size: var(--fs-productive-heading-07);
+  font-weight: 300;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+
+.count__l {
+  color: var(--text2);
+  font-size: var(--fs-body-compact-02);
+}
+
+/* The phase stepper: <ol class="phases"> with one <li> per phase, one per row at every width (labels are long, the
+ * number of phases is whatever cycle.json lists). A bar down the inline-start edge: grey = to come, accent = done,
+ * accent + bold --text = now. The current one has aria-current="step" and .is-on. */
+.phases {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-3);
+  margin: var(--space-5) 0 var(--space-3);
+  padding: 0;
+  list-style: none;
+}
+
+.phases li {
+  min-inline-size: 0;
+  margin: 0;
+  padding: var(--space-2) 0 var(--space-2) var(--space-4);
+  border-inline-start: var(--space-2) solid var(--line-strong);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  line-height: 1.3;
+}
+
+.phases li.is-done,
+.phases li.is-on {
+  border-inline-start-color: var(--accent);
+}
+
+.phases li.is-on {
+  color: var(--text);
+  font-weight: 600;
+}
+
+/* The phase's date range, under its label. --text2 on every state (the current label is --text). */
+.phases .phase__dates {
+  display: block;
+  margin-block-start: var(--space-2);
+  color: var(--text2);
+  font-weight: 400;
+}
+
+.opts {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.opt {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin: 0;
+  padding: var(--space-4);
+  background: var(--bg);
+  border: var(--border) solid var(--line);
+  font-size: var(--fs-body-compact-02);
+}
+
+.opt__label {
+  flex: none;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+}
+
+/* ------------------------------------------------------------------ card lists (MVPs, skills, builders)
+ * data-count (set by home.js) is how many cards there are, so a short list fills its row. */
+.cards > .placeholder-note {
+  margin: 0;
+}
+
+@media (min-width: 48rem) {
+  .cards > * {
+    grid-column: span 3;
+  }
+
+  .cards[data-count='1'] > *,
+  .cards[data-count='3'] > :last-child {
+    grid-column: span 6;
+  }
+}
+
+@media (min-width: 66rem) {
+  .cards[data-count='3'] > *,
+  .cards[data-count='3'] > :last-child {
+    grid-column: span 2;
+  }
+}

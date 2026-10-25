@@ -1,0 +1,195 @@
+/*
+ * switch.css: styles for the mode-switch overlays (js/switch-standard.js, switch-owen.js, switch-davina.js).
+ *
+ * Every overlay is a fixed, aria-hidden, pointer-events:none layer created by the script and removed when its
+ * animation ends. It carries data-mode="<the mode we are switching to>", so var(--bg), var(--accent) and the
+ * rest read the NEW palette (tokens.css puts the palettes on [data-mode] attribute selectors). All motion is
+ * driven from the scripts with the Web Animations API; this file only holds the looks. Colours come from
+ * variables or color-mix() of variables, never literals.
+ */
+
+.bb-sw {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  overflow: hidden;
+  pointer-events: none;
+  contain: layout paint style;
+}
+
+.bb-sw > * {
+  position: absolute;
+  pointer-events: none;
+}
+
+/* The short fade used by Owen and Davina for reduced motion, the static tier and rapid repeats.
+   It carries data-motion="fade" so the reduced-motion duration cut leaves it alone; only opacity changes. */
+.bb-sw--fade {
+  background: var(--bg);
+  opacity: 0;
+}
+
+/* ------------------------------------------------------------------ Standard: circular reveal */
+.bb-sw--standard .bb-sw__fill,
+.bb-sw--standard .bb-sw__rim {
+  inset: 0;
+}
+
+.bb-sw--standard .bb-sw__fill {
+  background: var(--bg);
+}
+
+.bb-sw--standard .bb-sw__rim {
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+/* ------------------------------------------------------------------ Owen: neon glitch */
+.bb-sw--owen .bb-sw__slice {
+  left: 0;
+  right: 0;
+  background: var(--bg);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 85%, transparent);
+  opacity: 0;
+}
+
+.bb-sw--owen:not(.bb-sw--lite) .bb-sw__slice {
+  border-bottom: 2px solid color-mix(in srgb, var(--accent2) 80%, transparent);
+}
+
+.bb-sw--owen .bb-sw__ghost {
+  position: absolute;
+}
+
+.bb-sw--owen .bb-sw__ghost--pink {
+  background: color-mix(in srgb, var(--accent) 55%, transparent);
+}
+
+.bb-sw--owen .bb-sw__ghost--cyan {
+  background: color-mix(in srgb, var(--accent2) 45%, transparent);
+}
+
+.bb-sw--owen .bb-sw__scanlines {
+  inset: 0;
+  background: repeating-linear-gradient(
+    to bottom,
+    transparent 0 2px,
+    color-mix(in srgb, var(--bg) 45%, transparent) 2px 4px
+  );
+  opacity: 0;
+}
+
+.bb-sw--owen .bb-sw__line {
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 3px;
+  background: var(--accent2);
+  box-shadow: 0 0 14px 2px color-mix(in srgb, var(--accent2) 70%, transparent);
+  opacity: 0;
+}
+
+.bb-sw--owen .bb-sw__bar {
+  left: -4%;
+  width: 108%;
+  background: color-mix(in srgb, var(--accent) 58%, transparent);
+  opacity: 0;
+}
+
+.bb-sw--owen .bb-sw__bar--c {
+  background: color-mix(in srgb, var(--accent2) 52%, transparent);
+}
+
+/* Full tier only: the sliced bars also corrupt the colours of the page behind them. Lite has none of this. */
+.bb-sw--owen:not(.bb-sw--lite) .bb-sw__bar--fx {
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  -webkit-backdrop-filter: hue-rotate(150deg) saturate(1.8);
+  backdrop-filter: hue-rotate(150deg) saturate(1.8);
+}
+
+/* ------------------------------------------------------------------ Davina: screen clean */
+.bb-sw--davina .bb-sw__mist {
+  inset: 0;
+  background: radial-gradient(
+    ellipse 120% 110% at var(--ox, 90%) var(--oy, 5%),
+    color-mix(in srgb, var(--text2) 46%, transparent),
+    color-mix(in srgb, var(--text2) 26%, transparent) 55%,
+    color-mix(in srgb, var(--text2) 18%, transparent)
+  );
+  opacity: 0;
+}
+
+.bb-sw--davina .bb-sw__puff {
+  width: 240px;
+  height: 240px;
+  margin: -120px 0 0 -120px;
+  border-radius: 50%;
+  background: radial-gradient(
+    closest-side,
+    color-mix(in srgb, var(--text) 62%, transparent),
+    color-mix(in srgb, var(--text2) 28%, transparent) 60%,
+    transparent
+  );
+  opacity: 0;
+}
+
+.bb-sw--davina .bb-sw__drops {
+  inset: 0;
+}
+
+.bb-sw--davina .bb-sw__drop {
+  left: 0;
+  top: 0;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle at 32% 30%,
+    color-mix(in srgb, var(--text) 85%, transparent),
+    color-mix(in srgb, var(--text2) 55%, transparent) 55%,
+    color-mix(in srgb, var(--text2) 35%, transparent)
+  );
+  border: 1px solid color-mix(in srgb, var(--text2) 75%, transparent);
+  opacity: 0;
+}
+
+/* The clean layer: Davina's own background, uncovered by the cloth. */
+.bb-sw--davina .bb-sw__clean {
+  inset: 0;
+  background: var(--bg);
+  clip-path: polygon(0 0, 0 0, 0 100%, 0 100%);
+}
+
+.bb-sw--davina .bb-sw__cloth {
+  top: -10%;
+  left: 0;
+  height: 120%;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 9px,
+      color-mix(in srgb, var(--bg) 14%, transparent) 9px 10px
+    ),
+    linear-gradient(
+      to right,
+      color-mix(in srgb, var(--accent2) 0%, transparent),
+      color-mix(in srgb, var(--hl2) 80%, transparent) 38%,
+      color-mix(in srgb, var(--accent2) 94%, transparent)
+    );
+  border-radius: 0 28px 28px 0;
+  box-shadow: 0 0 28px color-mix(in srgb, var(--bg) 55%, transparent);
+  transform-origin: 50% 50%;
+}
+
+.bb-sw--davina.bb-sw--rtl .bb-sw__cloth {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 9px,
+      color-mix(in srgb, var(--bg) 14%, transparent) 9px 10px
+    ),
+    linear-gradient(
+      to left,
+      color-mix(in srgb, var(--accent2) 0%, transparent),
+      color-mix(in srgb, var(--hl2) 80%, transparent) 38%,
+      color-mix(in srgb, var(--accent2) 94%, transparent)
+    );
+  border-radius: 28px 0 0 28px;
+}

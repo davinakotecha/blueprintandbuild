@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>How it works | Blueprint &amp; Build</title>
+<meta name="description" content="The two-month cycle as a scroll story, the ground rules and the questions people ask most.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/plex-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/effects.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/story.css">
+<link rel="stylesheet" href="css/story-pin.css" media="(prefers-reduced-motion: no-preference)">
+<link rel="stylesheet" href="css/story-stage.css" media="(prefers-reduced-motion: no-preference)">
+<link rel="stylesheet" href="css/switch.css">
+<script src="js/mode-boot.js"></script>
+</head>
+<body class="has-grain">
+<header data-site-header class="glass site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head">
+      <p class="eyebrow">Blueprint &amp; Build</p>
+      <!-- Kinetic headline: the full text is read from the .sr-only span, and the aria-hidden words are the ones that rise in (story.css, CSS only: no script, no flash). -->
+      <h1 class="display kx" data-kinetic><span class="sr-only">How it works</span><span aria-hidden="true"><span class="kx__w"><span class="kx__i">How</span></span> <span class="kx__w"><span class="kx__i">it</span></span> <span class="kx__w"><span class="kx__i">works</span></span></span></h1>
+      <p class="lede" data-hiw-intro>The two-month cycle step by step, the ground rules and the questions people ask most.</p>
+    </div>
+  </div>
+
+  <!-- story.js renders the steps, ground rules, FAQ and builder cards here from data/pages.json. -->
+  <div data-scroll-story aria-busy="true">
+    <noscript>
+      <div class="wrap"><p class="placeholder-note">This page needs JavaScript to show the steps. In short: ideas open every cycle, the builders pick three, the practice votes in Slack, and two builders ship the winner in the Build month.</p></div>
+    </noscript>
+  </div>
+</main>
+
+<footer data-site-footer class="site-footer"></footer>
+
+<script type="module" src="js/layout.js"></script>
+<script type="module" src="js/story.js"></script>
+</body>
+</html>

@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Page not found | Blueprint &amp; Build</title>
+<meta name="robots" content="noindex">
+<link rel="icon" href="data:,">
+<script>
+/*
+ * Why this page loads its own styles and scripts from a script.
+ * A missing address such as https://host/REPO/a/b/c is answered with this file AT THAT ADDRESS, so a plain
+ * href="css/base.css" would be looked for in /REPO/a/b/css/. The site root is not known in advance (the repository name
+ * is chosen when the site is uploaded, and the site may later move), so the page finds it: it looks upward from its own
+ * address for the folder that holds favicon.svg, sets <base> to that folder, and only then adds its stylesheets and
+ * scripts. They are added by script, not written in the markup, so the browser never fetches them from the wrong place first.
+ * No configuration and no repository name is needed. It costs a few small requests, and only on this page.
+ */
+(function () {
+  var root = document.documentElement;
+  var mode = 'standard';
+  try {
+    var saved = window.localStorage.getItem('bb-mode');
+    if (saved === 'owen' || saved === 'davina') mode = saved;
+  } catch (error) {
+    // Storage blocked: Standard.
+  }
+  root.setAttribute('data-mode', mode);
+
+  var STYLES = ['css/tokens.css', 'css/base.css', 'css/effects.css', 'css/layout.css', 'css/components.css', 'css/scene-404.css', 'css/switch.css'];
+  var SCRIPTS = ['js/layout.js', 'js/scene-404.js'];
+
+  // Folders above this address, SHALLOWEST first: /REPO/ then /REPO/a/ then /REPO/a/b/, and the domain root last. A project
+  // site lives at /REPO/, so the very first guess is right and no failed request is ever made, at any depth. (A site at
+  // the root of its own address costs one failed request on a deep missing path, which is harmless.)
+  var parts = window.location.pathname.split('/').filter(Boolean);
+  if (window.location.pathname.charAt(window.location.pathname.length - 1) !== '/') parts.pop(); // the last part is the missing file
+  var candidates = [];
+  for (var i = 1; i <= parts.length; i += 1) candidates.push('/' + parts.slice(0, i).join('/') + '/');
+  candidates.push('/');
+
+  function holdsTheSite(folder) {
+    // A plain GET of a tiny file, not HEAD: some browsers report a bodiless HEAD answer as a cancelled request.
+    return window.fetch(folder + 'favicon.svg', { cache: 'no-store' })
+      .then(function (response) { return response.ok; })
+      .catch(function () { return false; });
+  }
+
+  function findRoot(index) {
+    if (index >= candidates.length) return Promise.resolve('/');
+    return holdsTheSite(candidates[index]).then(function (found) {
+      return found ? candidates[index] : findRoot(index + 1);
+    });
+  }
+
+  function load(base) {
+    var baseTag = document.createElement('base');
+    baseTag.setAttribute('href', base);
+    document.head.insertBefore(baseTag, document.head.firstChild);
+    var icon = document.querySelector('link[rel="icon"]');
+    if (icon) icon.setAttribute('href', 'favicon.svg');
+    STYLES.forEach(function (href) {
+      var link = document.createElement('link');
+      link.rel = 'stylesheet';
+      link.href = href;
+      document.head.appendChild(link);
+    });
+    SCRIPTS.forEach(function (src) {
+      var script = document.createElement('script');
+      script.type = 'module';
+      script.src = src;
+      document.head.appendChild(script);
+    });
+  }
+
+  findRoot(0).then(load);
+})();
+</script>
+</head>
+<body class="has-grain page-404">
+<header data-site-header class="glass site-header"></header>
+
+<main id="main">
+  <!-- The 404 scene (scene-404.js): in the full and lite tiers particles scatter into the words "This MVP hasn't been built yet"
+       on a canvas mounted here. Decorative only: aria-hidden, no pointer events. Static tier: a CSS-only version (scene-404.css). -->
+  <div data-scene-404 aria-hidden="true"></div>
+  <div class="wrap">
+    <div class="page-head">
+      <p class="eyebrow">Error 404</p>
+      <h1 class="display">This MVP hasn’t been built yet.</h1>
+      <p class="lede">The page you asked for is not here. If it is something you wish existed, send it in as an idea.</p>
+      <div class="btn-row">
+        <a class="btn" href="submit.html">Submit it as an idea <span aria-hidden="true">→</span></a>
+        <a class="btn btn--ghost" href="index.html">Back to Home</a>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer data-site-footer class="site-footer"></footer>
+</body>
+</html>

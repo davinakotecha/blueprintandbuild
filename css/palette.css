@@ -1,0 +1,198 @@
+/*
+ * palette.css (frontend-builder B). The search palette. Not in any page <head>: palette.js adds it as a <link>
+ * the first time the palette opens, so it costs nothing on first paint. Colours are variables only. The panel is
+ * .glass (effects.css), so text on it uses only --text, --text2 and the accent text colours. The open/close fade runs
+ * in the full and lite tiers and never under prefers-reduced-motion.
+ */
+html.has-palette {
+  overflow: hidden;
+}
+
+.palette {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-overlay);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: var(--space-5) var(--space-4);
+  background: color-mix(in srgb, var(--bg) 72%, transparent);
+}
+
+.palette[hidden] {
+  display: none;
+}
+
+@media (min-width: 48rem) {
+  .palette {
+    padding-block-start: var(--space-11);
+  }
+}
+
+.palette__panel {
+  display: flex;
+  flex-direction: column;
+  inline-size: 100%;
+  max-inline-size: 40rem;
+  max-block-size: calc(100dvh - var(--space-7));
+  padding: 0;
+  box-shadow: 0 var(--space-3) var(--space-8) var(--shadow);
+}
+
+.palette__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding: var(--space-3) var(--space-3) var(--space-3) var(--space-4);
+  border-block-end: var(--border) solid var(--line);
+}
+
+.palette__bar label {
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.palette__input {
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  background: var(--bg);
+}
+
+.palette__close {
+  flex: none;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  padding-inline: var(--space-3);
+  border: var(--border) solid var(--line-strong);
+}
+
+.palette__close:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.palette__list {
+  flex: 1 1 auto;
+  margin: 0;
+  padding: var(--space-2);
+  overflow-y: auto;
+  list-style: none;
+}
+
+.palette__list[hidden] {
+  display: none;
+}
+
+.palette__option {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: var(--space-1) var(--space-4);
+  min-block-size: var(--touch-target);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-inline-start: var(--space-1) solid transparent;
+  color: var(--text);
+  cursor: pointer;
+}
+
+.palette__option[aria-selected='true'] {
+  background: color-mix(in srgb, var(--accent) 14%, var(--surface));
+  border-inline-start-color: var(--accent);
+}
+
+.palette__title {
+  min-inline-size: 0;
+  font-size: var(--fs-body-compact-02);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.palette__kind {
+  align-self: start;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* Up to two lines, so on a phone the first meaningful words show instead of one clipped line. No fixed height:
+ * the box grows with text-spacing overrides and zoom, and only the clamp ever cuts text. */
+.palette__desc {
+  grid-column: 1 / -1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  color: var(--text2);
+  font-size: var(--fs-label-01);
+  line-height: var(--lh-label-01);
+  overflow-wrap: anywhere;
+}
+
+/* "No results" message. --text2 on the --glass panel passes AA in all three modes. */
+.palette__empty {
+  margin: 0;
+  padding: var(--space-4) var(--space-5);
+  color: var(--text2);
+  font-size: var(--fs-body-compact-01);
+  line-height: var(--lh-body-compact-01);
+  overflow-wrap: anywhere;
+}
+
+.palette__empty[hidden] {
+  display: none;
+}
+
+.palette__foot {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-1) var(--space-5);
+  margin: 0;
+  padding: var(--space-3) var(--space-4);
+  border-block-start: var(--border) solid var(--line);
+  color: var(--text2);
+  font-size: var(--fs-label-01);
+}
+
+.palette__foot p {
+  margin: 0;
+}
+
+.palette__keys {
+  display: none;
+  font-family: var(--font-mono);
+}
+
+@media (min-width: 48rem) and (hover: hover) {
+  .palette__keys {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html[data-tier='full'] .palette:not([hidden]),
+  html[data-tier='lite'] .palette:not([hidden]) {
+    animation: bb-palette-fade var(--dur-moderate) var(--ease-productive-entrance) both;
+  }
+
+  html[data-tier='full'] .palette:not([hidden]) .palette__panel,
+  html[data-tier='lite'] .palette:not([hidden]) .palette__panel {
+    animation: bb-palette-rise var(--dur-moderate) var(--ease-productive-entrance) both;
+  }
+}
+
+@keyframes bb-palette-fade {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bb-palette-rise {
+  from { transform: translateY(var(--space-4)); }
+  to { transform: none; }
+}

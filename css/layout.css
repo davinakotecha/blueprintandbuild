@@ -1,0 +1,422 @@
+/*
+ * layout.css (frontend-builder). The sticky header, brand mark, primary nav, mode toggle, footer and the
+ * small page-shell pieces shared by every page. Mobile-first: the base rules are the phone layout and
+ * min-width: 48rem (--bp-bento) switches to the wide one. Colours are variables only. The header carries
+ * .glass (effects.css), so it is a solid --surface until the full tier turns the blur on.
+ */
+
+/* ------------------------------------------------------------------ header */
+[data-site-header] {
+  min-block-size: var(--header-h); /* reserved before layout.js fills it: no layout shift */
+}
+
+.site-header {
+  position: sticky;
+  inset-block-start: 0;
+  z-index: var(--z-header);
+  padding: 0;
+  border-width: 0 0 var(--border) 0;
+}
+
+/* html has scroll-padding to clear this sticky header for anchor jumps. A control inside the header is already
+   clear of it, but the browser still tries to keep a focused element below that padding, and scrolls the page up
+   when you focus (or arrow-key through) a header control. A negative margin cancels the padding for these. */
+.site-header :is(a, button, input, [role='radio']) {
+  scroll-margin-block-start: calc(-1 * (var(--header-h) + var(--space-5)));
+}
+
+/* The mock's header sits flat on the page: no drop shadow, even where .glass adds one (full tier). */
+html[data-tier] .site-header {
+  box-shadow: none;
+}
+
+.site-header__bar {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  min-block-size: var(--header-h);
+}
+
+/* Phone order is the tab order: brand, Menu, then the mode button on the right. */
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1 1 auto;
+  min-inline-size: 0;
+  min-block-size: var(--touch-target);
+  color: var(--text);
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.2;
+  text-decoration: none;
+}
+
+.brand__mark {
+  flex: none;
+  inline-size: var(--space-6);
+  block-size: var(--space-6);
+  background: var(--accent);
+  clip-path: polygon(0 0, 100% 0, 100% 60%, 60% 100%, 0 100%);
+}
+
+.nav-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-inline: var(--space-3);
+  color: var(--text);
+  font-size: var(--fs-body-compact-01);
+  font-weight: 600;
+}
+
+.nav-toggle__icon {
+  flex: none;
+  inline-size: var(--space-5);
+  block-size: var(--space-3);
+  border-block: var(--border-strong) solid currentcolor;
+  position: relative;
+}
+
+/* On the narrowest phones the "Menu" label alone keeps the bar clear for Search and the mode button. */
+@media (max-width: 23.9375rem) {
+  .nav-toggle__icon {
+    display: none;
+  }
+
+  .brand {
+    gap: var(--space-2);
+  }
+
+  .brand__mark {
+    inline-size: var(--space-5);
+    block-size: var(--space-5);
+  }
+}
+
+.nav-toggle__icon::after {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  border-block-start: var(--border-strong) solid currentcolor;
+  translate: 0 -50%;
+}
+
+/* The nav is a panel under the bar on phones (display toggled by the disclosure button). */
+.site-nav {
+  display: none;
+  position: absolute;
+  inset: 100% 0 auto;
+  padding: var(--space-3) var(--wrap-pad) var(--space-5);
+  background: var(--surface);
+  border-block: var(--border) solid var(--line);
+}
+
+.site-header[data-nav-open='true'] .site-nav {
+  display: block;
+}
+
+.site-nav__list,
+.site-footer__links {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.site-nav__list li + li,
+.site-footer__links li + li {
+  margin-block-start: 0;
+}
+
+.site-nav a,
+.site-footer a {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  text-decoration: none;
+}
+
+.site-nav a {
+  inline-size: 100%;
+  color: var(--text2);
+  font-size: var(--fs-body-compact-02);
+}
+
+.site-nav a:hover {
+  color: var(--text);
+}
+
+.site-nav a[aria-current='page'] {
+  color: var(--text);
+  font-weight: 600;
+  box-shadow: inset 0 calc(-1 * var(--border-strong)) var(--accent);
+}
+
+/* ------------------------------------------------------------------ search button
+ * Opens the search palette (palette.js, loaded on first use). An icon-only 44px target on phones and tablets; from
+ * 66rem it reads "Search" with the shortcut as text. The icon is drawn in CSS: a ring and a handle in currentcolor. */
+.search-btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  color: var(--text);
+  border-radius: var(--radius-pill);
+  font-size: var(--fs-body-compact-01);
+}
+
+.search-btn:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+}
+
+.search-btn__icon {
+  position: relative;
+  flex: none;
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  border: var(--border-strong) solid currentcolor;
+  border-radius: var(--radius-pill);
+}
+
+.search-btn__icon::after {
+  content: '';
+  position: absolute;
+  inset-inline-start: 100%;
+  inset-block-start: 100%;
+  inline-size: var(--space-3);
+  border-block-start: var(--border-strong) solid currentcolor;
+  transform-origin: 0 0;
+  rotate: 45deg;
+  translate: calc(-1 * var(--space-1)) calc(-1 * var(--space-1));
+}
+
+/* Below 66rem the button is the icon alone: the label stays for screen readers, the shortcut is not shown. */
+.search-btn__label {
+  position: absolute;
+  inline-size: 1px;
+  block-size: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.search-btn__keys {
+  display: none;
+}
+
+/* ------------------------------------------------------------------ mode toggle
+ * Two views of the same state (mode.js): a radio group from 48rem, one cycling button on phones. */
+.mode-toggle {
+  flex: none;
+}
+
+.mode-radios {
+  display: none;
+}
+
+.mode-radios,
+.mode-cycle {
+  border: var(--border) solid var(--line);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+}
+
+.mode-radios {
+  padding: var(--space-1);
+  gap: var(--space-1);
+}
+
+.mode-radio,
+.mode-cycle {
+  color: var(--text2);
+  font-size: var(--fs-body-compact-01);
+}
+
+.mode-radio {
+  padding-inline: var(--space-4);
+  border-radius: var(--radius-pill);
+  transition: background-color var(--dur-fast) var(--ease-productive), color var(--dur-fast) var(--ease-productive);
+}
+
+.mode-radio:hover {
+  color: var(--text);
+}
+
+.mode-radio[aria-checked='true'] {
+  background: var(--accent);
+  color: var(--on-accent);
+  font-weight: 600;
+}
+
+.mode-cycle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  padding-inline: var(--space-3);
+  color: var(--text);
+  font-weight: 600;
+}
+
+.mode-cycle__dot {
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+}
+
+@media (min-width: 48rem) {
+  .site-header__bar {
+    gap: var(--space-4);
+  }
+
+  .brand {
+    flex: none;
+  }
+
+  .nav-toggle {
+    display: none;
+  }
+
+  .site-nav {
+    display: block;
+    position: static;
+    flex: 1 1 auto;
+    padding: 0;
+    background: none;
+    border: 0;
+  }
+
+  .site-nav__list {
+    flex-direction: row;
+    gap: var(--space-4);
+  }
+
+  .site-nav a {
+    inline-size: auto;
+    font-size: var(--fs-body-compact-01);
+  }
+
+  .mode-radios {
+    display: flex;
+  }
+
+  .mode-radio {
+    padding-inline: var(--space-3);
+  }
+
+  .mode-cycle {
+    display: none;
+  }
+}
+
+@media (min-width: 66rem) {
+  .site-header__bar {
+    gap: var(--space-6);
+  }
+
+  .site-nav__list {
+    gap: var(--space-5);
+  }
+
+  .mode-radio {
+    padding-inline: var(--space-4);
+  }
+
+  .search-btn {
+    padding-inline: var(--space-4);
+    border: var(--border) solid var(--line);
+  }
+
+  .search-btn__label {
+    position: static;
+    inline-size: auto;
+    block-size: auto;
+    margin: 0;
+    overflow: visible;
+    clip-path: none;
+  }
+
+  .search-btn__keys {
+    display: inline-block;
+    padding: var(--space-1) var(--space-2);
+    border: var(--border) solid var(--line-strong);
+    color: var(--text2);
+    font-family: var(--font-mono);
+    font-size: var(--fs-label-01);
+  }
+}
+
+/* ------------------------------------------------------------------ footer */
+.site-footer {
+  margin-block-start: var(--space-10);
+  padding-block: var(--space-7);
+  border-block-start: var(--border) solid var(--line);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+}
+
+.site-footer__inner {
+  display: grid;
+  gap: var(--space-5);
+}
+
+.site-footer__inner > * {
+  margin: 0;
+}
+
+.site-footer__links {
+  flex-flow: row wrap;
+  column-gap: var(--space-6);
+}
+
+.site-footer__sample {
+  max-inline-size: var(--measure);
+}
+
+/* The build date: small and quiet, but readable (it is the way to tell that the live site has updated). */
+.site-footer__notes {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.site-footer__built {
+  margin: 0;
+  color: var(--text2);
+}
+
+@media (min-width: 48rem) {
+  .site-footer__inner {
+    grid-template-columns: 1fr auto;
+    align-items: center;
+  }
+
+  .site-footer__notes {
+    grid-column: 1 / -1;
+  }
+}
+
+/* ------------------------------------------------------------------ page shell */
+main {
+  display: block;
+}
+
+main:focus {
+  outline: none; /* focus lands here only from the skip link; the page is not an interactive control */
+}
+
+.page-head {
+  padding-block: var(--space-9) var(--space-7);
+}
+
+.page-head .lede {
+  margin-block-end: 0;
+}
+
+.section {
+  padding-block: var(--space-8) 0;
+}

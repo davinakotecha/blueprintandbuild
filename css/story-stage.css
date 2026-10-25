@@ -1,0 +1,183 @@
+/*
+ * story-stage.css (creative-dev): the two widgets inside the pinned stage on How it works, loaded with story-pin.css
+ * (same media condition). The progress track: one cell per step, grouped under the month labels. The motif: dots and rings
+ * in --dot and --dot2 that shift with --i (the active step, set by story.js); in the full tier a canvas fades in over it.
+ * CSS scroll timelines (animation-timeline) drive the track fill and the title's weight and width where supported;
+ * elsewhere story.js sets data-s on each track cell and a transition does the work.
+ */
+
+/* The progress track: six steps across two months. */
+.track {
+  --n: 6;
+  grid-area: track;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.track__months,
+.track__rail {
+  display: grid;
+  grid-template-columns: repeat(var(--n), minmax(0, 1fr));
+}
+
+.track__month {
+  margin-inline-end: var(--space-1);
+  padding-block-start: var(--space-1);
+  overflow: hidden;
+  border-block-start: var(--border-strong) solid var(--line-strong);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.06em;
+  line-height: 1.3;
+  text-overflow: ellipsis;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.track__rail {
+  position: relative;
+  block-size: var(--space-6);
+}
+
+/* One cell per step: a grey line across it, an accent segment over the line, and the numbered node at its middle. */
+.track__cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.track__cell::before,
+.track__seg {
+  content: '';
+  position: absolute;
+  inset: 50% 0 auto;
+  block-size: var(--border-strong);
+  translate: 0 -50%;
+}
+
+.track__cell::before {
+  background: var(--line-strong);
+}
+
+/* Without scroll timelines the segment follows the active step: full when done, half when current. */
+.track__seg {
+  background: var(--accent);
+  transform-origin: 0 50%;
+  scale: 0 1;
+  transition: scale var(--dur-slow) var(--ease-expressive);
+}
+
+.track__cell[data-s='done'] .track__seg {
+  scale: 1 1;
+}
+
+.track__cell[data-s='on'] .track__seg {
+  scale: 0.5 1;
+}
+
+.track__node {
+  position: relative;
+  display: grid;
+  place-items: center;
+  justify-self: center;
+  inline-size: var(--space-6);
+  block-size: var(--space-6);
+  background: var(--surface);
+  border: var(--border-strong) solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  line-height: 1;
+  transition: scale var(--dur-moderate) var(--ease-expressive), background-color var(--dur-moderate) var(--ease-productive);
+}
+
+.track__cell[data-s='done'] .track__node,
+.track__cell[data-s='on'] .track__node {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--on-accent);
+}
+
+.track__cell[data-s='on'] .track__node {
+  scale: 1.25;
+}
+
+/* The motif: CSS only (dots that shift and rings that grow with --i). In the full tier a canvas fades in over it. */
+.motif {
+  grid-area: motif;
+  position: relative;
+  min-block-size: 3.5rem;
+  overflow: hidden;
+  mask-image: radial-gradient(ellipse at 50% 50%, var(--bg) 55%, transparent 100%);
+}
+
+.motif::before,
+.motif::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  transition: opacity var(--dur-slow) var(--ease-productive), background-position var(--dur-slow) var(--ease-expressive), scale var(--dur-slow) var(--ease-expressive);
+}
+
+.motif::before {
+  background: radial-gradient(circle, var(--dot) 0 1.5px, transparent 2.2px) calc(var(--i, 0) * var(--space-5)) calc(var(--i, 0) * var(--space-3) * -1) / var(--space-5) var(--space-5);
+  opacity: 0.85;
+}
+
+.motif::after {
+  background: repeating-radial-gradient(circle at 50% 100%, transparent 0 var(--space-5), var(--dot2) var(--space-5) calc(var(--space-5) + 1px));
+  opacity: 0.5;
+  scale: calc(0.6 + var(--i, 0) * 0.12);
+  transform-origin: 50% 100%;
+}
+
+.motif canvas {
+  position: absolute;
+  inset: 0;
+  inline-size: 100%;
+  block-size: 100%;
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-productive);
+}
+
+.motif[data-state='live'] canvas {
+  opacity: 1;
+}
+
+.motif[data-state='live']::before,
+.motif[data-state='live']::after {
+  opacity: 0;
+}
+
+/* Scroll-linked fill and title axes: the browser moves them with the scroll position, no script. story.js names a view
+ * timeline --sK on step K, hoists the names with timeline-scope on .story, and points segment K and title K at it (inline
+ * animation-timeline and animation-range), so a segment fills as its step crosses the window. Without support the data-s
+ * rules above apply. */
+@supports (animation-timeline: view()) and (timeline-scope: --a) {
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes seg-fill {
+      from { scale: 0 1; }
+      to { scale: 1 1; }
+    }
+
+    @keyframes title-axes {
+      from { --display-wght: 200; --display-wdth: 80; }
+      to { --display-wght: 500; --display-wdth: 100; }
+    }
+
+    .story.is-pinned .track__seg {
+      transition: none;
+      animation-name: seg-fill;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+    }
+
+    .story.is-pinned .stage__w {
+      animation-name: title-axes;
+      animation-timing-function: linear;
+      animation-fill-mode: both;
+    }
+  }
+}

@@ -1,0 +1,245 @@
+/*
+ * catalog.css (frontend-builder A). The listing pages: the MVP catalog (filter bar, result count, card grid), the
+ * Claude skills page (its card grid; the install disclosure is in skills.css) and the vote page (countdown panel, how-it-works list).
+ * Mobile first: one column on phones, the bento grid from 48rem (--bp-bento), three across from 66rem (--bp-lg).
+ * The notice, the field and the section heading are shared and live in components.css.
+ * Colours are variables only. Text on .glass uses --text and --text2 only.
+ */
+
+/* ------------------------------------------------------------------ intro
+ * Catalog and Skills: the lede and the page note sit in .page-intro, and the notices use .notice--page, so all of
+ * them end at the same right edge (--measure at body size). The head is tighter than the other pages' so the
+ * filter bar starts near the top of a laptop screen and of a phone. */
+.page-head--listing {
+  padding-block: var(--space-8) var(--space-4);
+}
+
+.page-intro {
+  max-inline-size: var(--measure);
+}
+
+.page-intro .lede {
+  max-inline-size: none;
+  margin-block: var(--space-5) var(--space-4);
+}
+
+.page-note {
+  margin-block: 0;
+  color: var(--text2);
+  font-size: var(--fs-body-compact-02);
+}
+
+.page-intro .notice {
+  margin-block-end: 0;
+}
+
+/* A notice between a heading or a bar and a card grid: the same right edge as the intro above. */
+.notice--page {
+  max-inline-size: var(--measure);
+  margin-block: 0 var(--space-6);
+}
+
+/* ------------------------------------------------------------------ filter bar
+ * Phones: search full width, type and status side by side (as long as two columns of 8.5rem fit, else one per row),
+ * then tag full width. From 42rem: search, then type, status and tag across. From 66rem: all four in one row. */
+.filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(8.5rem, 1fr));
+  gap: var(--space-5);
+  align-items: end;
+  padding: var(--space-5);
+}
+
+.filters .field {
+  margin-block-end: 0;
+}
+
+.filters .field label {
+  color: var(--text2);
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.field--search,
+.field--tag {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 42rem) {
+  .filters {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+
+  .field--tag {
+    grid-column: auto;
+  }
+}
+
+@media (min-width: 66rem) {
+  .filters {
+    grid-template-columns: minmax(0, 2fr) repeat(3, minmax(0, 1fr));
+  }
+
+  .field--search {
+    grid-column: auto;
+  }
+}
+
+.result-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3) var(--space-5);
+  min-block-size: var(--touch-target);
+  margin-block: var(--space-5);
+}
+
+.result-count {
+  margin: 0;
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.04em;
+}
+
+/* ------------------------------------------------------------------ card grids (catalog, skills, vote)
+ * data-count="1" (a placeholder or a lone card) fills the row. */
+.catalog-grid > .placeholder-note {
+  margin: 0;
+}
+
+.catalog-grid[data-count='1'] > *,
+.catalog-grid > .placeholder-note,
+.catalog-grid > .empty-state {
+  grid-column: 1 / -1;
+}
+
+@media (min-width: 48rem) {
+  .catalog-grid > * {
+    grid-column: span 3;
+  }
+}
+
+@media (min-width: 66rem) {
+  .catalog-grid > * {
+    grid-column: span 2;
+  }
+}
+
+.empty-state {
+  max-inline-size: var(--measure);
+}
+
+/* The card a link such as catalog.html#<id> points at. :target covers the browser's own jump; .is-target is added
+ * by focusTarget() because the cards are built after the page has loaded. Not colour alone: a thicker border. */
+.card:target,
+.card.is-target {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 var(--border-strong) var(--accent);
+  background: color-mix(in srgb, var(--accent) 8%, var(--surface));
+}
+
+.card[id] {
+  scroll-margin-block-start: calc(var(--header-h) + var(--space-6));
+}
+
+/* A short list of facts on a card: cycle, idea owner, builders, version. */
+.facts {
+  display: grid;
+  gap: var(--space-2);
+  margin: var(--space-3) 0 var(--space-3);
+}
+
+.facts div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-3);
+}
+
+.facts dt,
+.facts dd {
+  margin: 0;
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.04em;
+}
+
+.facts dt {
+  min-inline-size: 6.5rem;
+  color: var(--text2);
+  text-transform: uppercase;
+}
+
+.facts dd {
+  color: var(--text);
+}
+
+/* ------------------------------------------------------------------ vote */
+.vote-status {
+  display: grid;
+  gap: var(--space-4);
+  margin-block-end: var(--space-6);
+}
+
+.vote-status > p {
+  margin: 0;
+}
+
+.vote-count {
+  color: var(--text);
+  font-size: var(--fs-productive-heading-04);
+  font-weight: 300;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+
+.vote-dates,
+.vote-note {
+  color: var(--text2);
+  font-size: var(--fs-body-compact-02);
+}
+
+.vote-dates__label {
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.how-list {
+  display: grid;
+  gap: var(--space-3);
+  max-inline-size: var(--measure);
+  margin: 0;
+  color: var(--text2);
+  font-size: var(--fs-body-compact-02);
+}
+
+.how-list li {
+  margin: 0;
+  padding-inline-start: var(--space-2);
+}
+
+.how-list li::marker {
+  color: var(--accent-text);
+  font-family: var(--font-mono);
+  font-weight: 600;
+}
+
+@media (min-width: 48rem) {
+  .vote-status {
+    grid-template-columns: 1fr auto;
+    align-items: baseline;
+    column-gap: var(--space-7);
+  }
+
+  .vote-note {
+    grid-column: 1 / -1;
+  }
+
+  .vote-count {
+    font-size: var(--fs-productive-heading-05);
+  }
+}

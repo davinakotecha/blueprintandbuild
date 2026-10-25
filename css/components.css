@@ -1,0 +1,295 @@
+/*
+ * components.css (frontend-builder). The pieces every page shares: buttons, tags, cards, the avatar and person row,
+ * the section heading, the notice box, the form field and the small helpers. Each of these is defined here once.
+ * Home-only pieces (the stats strip, the phase stepper) are in home.css.
+ * Colours are variables only (tokens.css); text on a fill uses --on-accent, accent text uses --accent-text.
+ * Every control is at least --touch-target (44px) tall. Focus rings come from base.css.
+ */
+
+/* ------------------------------------------------------------------ buttons
+ * Works on <a> and <button>. Primary = accent fill; --ghost = outline. */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-3);
+  min-block-size: var(--control-height);
+  min-inline-size: var(--touch-target);
+  padding: var(--space-3) var(--space-5);
+  background: var(--accent);
+  color: var(--on-accent);
+  border: var(--border) solid var(--accent);
+  font-size: var(--fs-body-compact-02);
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease-productive), border-color var(--dur-fast) var(--ease-productive);
+}
+
+.btn:hover {
+  background: var(--accent-hover);
+  border-color: var(--accent-hover);
+  text-decoration: none;
+}
+
+.btn:active {
+  background: var(--accent-active);
+  border-color: var(--accent-active);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--text2);
+}
+
+.btn--ghost:hover {
+  background: color-mix(in srgb, var(--text) 8%, transparent);
+  border-color: var(--text);
+}
+
+.btn--ghost:active {
+  background: color-mix(in srgb, var(--text) 16%, transparent);
+}
+
+/* A control that is not available yet: reads as plain text, not as a button. */
+.btn-note {
+  display: inline-flex;
+  align-items: center;
+  min-block-size: var(--touch-target);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+}
+
+.btn-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-4);
+}
+
+/* ------------------------------------------------------------------ tags
+ * Two label styles from the mock. --tag-* and --tag2-* are checked for AA by tokens.mjs. */
+.tag {
+  display: inline-block;
+  margin-block-end: var(--space-4);
+  padding: var(--space-2) var(--space-3);
+  background: var(--tag-bg);
+  color: var(--tag-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  line-height: 1.2;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tag--b {
+  background: var(--tag2-bg);
+  color: var(--tag2-text);
+}
+
+/* Owen and Davina: their first tag colour (lime, sage) is loud next to a filled button, so the plain tag becomes an
+ * outline and only .tag--b stays filled. --text2 on --surface is 9.3:1 (Owen) and 7.2:1 (Davina); the --line-strong
+ * border is 3.2:1. The padding is cut by the border width so the tag keeps its size. */
+html[data-mode='owen'] .tag:not(.tag--b),
+html[data-mode='davina'] .tag:not(.tag--b) {
+  padding: calc(var(--space-2) - var(--border)) calc(var(--space-3) - var(--border));
+  background: transparent;
+  color: var(--text2);
+  border: var(--border) solid var(--line-strong);
+}
+
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-4);
+  padding: 0;
+  list-style: none;
+}
+
+.tag-list li {
+  margin: 0;
+}
+
+.tag-list .tag {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ card
+ * A surface with the mock's padding and heading. Put .card on .glass or .surface children of .bento. */
+.card {
+  display: flex;
+  flex-direction: column;
+  padding: var(--space-6);
+  background: var(--surface);
+  color: var(--text);
+  border: var(--border) solid var(--line);
+  --field-bg: var(--bg);
+}
+
+.card > :last-child {
+  margin-block-end: 0;
+}
+
+/* Cards are flex columns; a lone tag must not stretch across the card. */
+.card > .tag {
+  align-self: flex-start;
+}
+
+.card h3 {
+  margin-block-end: var(--space-3);
+}
+
+.card p {
+  color: var(--text2);
+  font-size: var(--fs-body-compact-02);
+}
+
+.card--accent {
+  border-color: var(--accent);
+}
+
+.card__foot {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-3);
+  align-items: center;
+  margin-block-start: auto;
+  padding-block-start: var(--space-5);
+}
+
+/* A block of copyable text (an example prompt, an install command). Use with .mono. */
+.code-block {
+  padding: var(--space-4);
+  background: var(--bg);
+  border: var(--border) solid var(--line);
+  color: var(--text2);
+  font-size: var(--fs-code-01);
+  line-height: var(--lh-code-01);
+  overflow-wrap: anywhere;
+}
+
+/* Small mono lines inside a card: a label above a block, or a line of facts. */
+.card .card__label,
+.card .card__meta {
+  margin-block: 0 var(--space-3);
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.04em;
+}
+
+.card .card__label {
+  margin-block-start: var(--space-3);
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ avatar and person row (builder cards) */
+.avatar {
+  display: grid;
+  place-items: center;
+  flex: none;
+  inline-size: var(--touch-target);
+  block-size: var(--touch-target);
+  overflow: hidden;
+  background: var(--accent);
+  color: var(--on-accent);
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+}
+
+.avatar img {
+  inline-size: 100%;
+  block-size: 100%;
+  object-fit: cover;
+}
+
+.person {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin-block-end: var(--space-4);
+}
+
+.person h3,
+.person .card__meta {
+  margin-block: 0;
+}
+
+/* ------------------------------------------------------------------ section heading
+ * An h2 with an optional link on the right, above a card grid. Home, Hall of fame, Skills and Vote use it. */
+.section-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-5);
+  margin-block: var(--space-9) var(--space-6);
+}
+
+.section-head h2 {
+  margin: 0;
+}
+
+/* ------------------------------------------------------------------ notice box
+ * The one note style: "these are samples", the form's confirmation, the no-JavaScript line. The .notice--page modifier
+ * (catalog.css) caps it at --measure on the listing pages. A <p> or a box with a .notice__label and a <p>. */
+.notice {
+  display: flex;
+  gap: var(--space-4);
+  align-items: flex-start;
+  margin-block: var(--space-5);
+  padding: var(--space-4) var(--space-5);
+  background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+  border: var(--border) solid var(--line);
+  border-inline-start: var(--space-2) solid var(--accent);
+  color: var(--text);
+  font-size: var(--fs-body-compact-02);
+}
+
+.notice p {
+  margin: 0;
+  color: var(--text);
+  font-size: inherit;
+}
+
+.notice__label {
+  flex: none;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ------------------------------------------------------------------ field
+ * A labelled control. Submit styles the parts (.field__label, __hint, __error) in forms.css; the catalog filter bar
+ * (catalog.css) uses it with a plain <label> and drops the bottom margin. */
+.field {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--space-2);
+  min-inline-size: 0;
+  margin-block-end: var(--space-6);
+}
+
+/* ------------------------------------------------------------------ small helpers */
+.card a:not(.btn) {
+  color: var(--accent-text);
+}
+
+/* A text link with a trailing arrow: the link is a flex box, so the space before the arrow collapses; the gap puts it back. */
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-block-size: var(--touch-target);
+}
+
+.placeholder-note {
+  color: var(--text2);
+  font-size: var(--fs-body-compact-02);
+}

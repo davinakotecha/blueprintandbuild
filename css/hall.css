@@ -1,0 +1,67 @@
+/*
+ * hall.css (frontend-builder B). Hall of fame only: the winner cards, the builders row and the "nothing yet" note.
+ * The section heading is .section-head and the builder row is .person, both in components.css.
+ * Mobile-first: one column on phones, two across from 48rem (--bp-bento). Colours are variables only.
+ */
+
+/* The first heading sits closer to the page head than the ones between sections (which keep .section-head's margin). */
+.hall-section:first-of-type > .section-head {
+  margin-block-start: var(--space-3);
+}
+
+.hall-cards > .placeholder-note {
+  margin: 0;
+}
+
+@media (min-width: 48rem) {
+  .hall-cards > * {
+    grid-column: span 3;
+  }
+
+  .hall-cards[data-count='1'] > *,
+  .hall-cards[data-count='3'] > :last-child {
+    grid-column: span 6;
+  }
+}
+
+@media (min-width: 66rem) {
+  .hall-cards[data-count='3'] > *,
+  .hall-cards[data-count='3'] > :last-child {
+    grid-column: span 2;
+  }
+}
+
+/* A card that explains an empty or sample state, full width above the list. */
+.hall-note {
+  margin-block-end: var(--space-6);
+}
+
+.hall-note p {
+  max-inline-size: var(--measure);
+}
+
+/* ------------------------------------------------------------------ a winner */
+.winner .credit {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-3) 0 0;
+}
+
+.winner .credit div {
+  display: grid;
+  gap: var(--space-1);
+}
+
+.winner .credit dt {
+  color: var(--text2);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.winner .credit dd {
+  margin: 0;
+  color: var(--text);
+  font-size: var(--fs-body-compact-02);
+}

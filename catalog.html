@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MVP catalog | Blueprint &amp; Build</title>
+<meta name="description" content="Every MVP the practice has built, with its problem, status and tags, and one click to open it, download it or copy its link.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/plex-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/effects.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/catalog.css">
+<link rel="stylesheet" href="css/switch.css">
+<script src="js/mode-boot.js"></script>
+</head>
+<body class="has-grain">
+<header data-site-header class="glass site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head page-head--listing">
+      <p class="eyebrow">Blueprint &amp; Build</p>
+      <!-- SLOT creative-dev (kinetic headline): add data-kinetic to this h1 when the shared kinetic script is ready. -->
+      <h1 class="display">MVP catalog</h1>
+      <div class="page-intro">
+        <p class="lede">Every MVP the practice has built, with its problem, status and tags, and one click to open it, download it or copy its link.</p>
+        <p class="page-note">Filter by type, status or tag, or search by keyword. Every download is a single file. In Chrome and Edge you can also drag a card to your desktop to save its file.</p>
+        <noscript><p class="notice">The list of MVPs is loaded with JavaScript. Turn JavaScript on for this site to browse the catalog.</p></noscript>
+      </div>
+    </div>
+
+    <div data-slot="filters"></div>
+    <div class="result-bar">
+      <p class="result-count" role="status" aria-live="polite" data-count></p>
+      <button type="button" class="btn btn--ghost" data-clear hidden>Clear filters</button>
+    </div>
+    <p class="notice notice--page" data-sample-note hidden>These MVPs are samples, so you can try the filters. Real MVPs replace them as they ship.</p>
+
+    <section aria-labelledby="results-title">
+      <h2 class="sr-only" id="results-title">MVPs</h2>
+      <div class="bento catalog-grid" data-slot="results"></div>
+    </section>
+  </div>
+</main>
+
+<footer data-site-footer class="site-footer"></footer>
+
+<script type="module" src="js/layout.js"></script>
+<script type="module" src="js/catalog.js"></script>
+</body>
+</html>

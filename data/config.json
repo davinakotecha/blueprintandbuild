@@ -1,0 +1,20 @@
+{
+  "siteName": "Blueprint & Build",
+  "siteUrl": "",
+  "practiceRepoUrl": "",
+  "slack": {
+    "teamId": "",
+    "channelId": "",
+    "channelName": "blueprint-and-build"
+  },
+  "links": {
+    "claudeSkillsHelp": "https://support.claude.com/en/articles/12512180-use-skills-in-claude"
+  },
+  "defaultMode": "standard",
+  "features": {
+    "slackForm": false,
+    "slackLinks": false,
+    "practiceRepoSync": false,
+    "sampleContent": true
+  }
+}

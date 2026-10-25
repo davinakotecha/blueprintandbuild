@@ -1,0 +1,242 @@
+/*
+ * story.css (creative-dev): the How it works page. Loaded after components.css, before switch.css, on this page only.
+ *
+ * Layers, from the one every visitor gets to the extras:
+ *   1. Base (this file): the steps are a plain stacked ordered list (.steps > .step), then rules, FAQ and builder cards.
+ *      This is all the static tier, reduced motion, and a page whose script failed will ever show.
+ *   2. Pinned story (story-pin.css): story.js adds .is-pinned to .story (full and lite tiers, never reduced motion) and
+ *      puts an aria-hidden sticky stage first in it. Removing the class and the stage gives layer 1 back.
+ *   3. Motion (this file): the kinetic h1 (CSS only) and scroll reveals on the lower sections, inside @supports.
+ */
+
+/* ------------------------------------------------------------------ kinetic headline
+ * The h1 holds the whole headline in .sr-only, and the same words again in an aria-hidden span, one .kx__w per
+ * word. Words rise into place while the weight and width axes open up. Static tier and reduced motion: no animation. */
+.kx__w {
+  display: inline-block;
+  margin: -0.1em -0.08em -0.1em 0;
+  padding: 0.1em 0.08em 0.1em 0;
+  overflow: hidden;
+  vertical-align: top;
+}
+
+.kx__i {
+  display: inline-block;
+}
+
+@keyframes kx-rise {
+  from { translate: 0 108%; }
+  to { translate: 0 0; }
+}
+
+@keyframes kx-axes {
+  from { --display-wght: 100; --display-wdth: 75; }
+  to { --display-wght: 300; --display-wdth: 100; }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-tier='static']) .kx {
+    animation: kx-axes 1.3s var(--ease-expressive-entrance) 60ms both;
+  }
+
+  html:not([data-tier='static']) .kx__i {
+    animation: kx-rise 820ms var(--ease-expressive-entrance) both;
+  }
+
+  html:not([data-tier='static']) .kx__w:nth-child(2) .kx__i { animation-delay: 90ms; }
+  html:not([data-tier='static']) .kx__w:nth-child(3) .kx__i { animation-delay: 180ms; }
+  html:not([data-tier='static']) .kx__w:nth-child(4) .kx__i { animation-delay: 270ms; }
+  html:not([data-tier='static']) .kx__w:nth-child(5) .kx__i { animation-delay: 360ms; }
+  html:not([data-tier='static']) .kx__w:nth-child(n + 6) .kx__i { animation-delay: 450ms; }
+}
+
+/* ------------------------------------------------------------------ page shell
+ * While story.js is fetching, the area keeps a full screen of height so the footer does not jump into view. */
+@media (scripting: enabled) {
+  [data-scroll-story][aria-busy='true'] {
+    min-block-size: 100svh;
+  }
+}
+
+/* ------------------------------------------------------------------ base: the stacked steps */
+.steps {
+  display: grid;
+  gap: var(--space-4);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.step {
+  position: relative;
+  display: grid;
+  gap: var(--space-3);
+  margin: 0;
+  padding: var(--space-6);
+  background: var(--surface);
+  border: var(--border) solid var(--line);
+  border-inline-start: var(--space-2) solid var(--accent);
+}
+
+.step[data-month='build'] {
+  border-inline-start-color: var(--accent2);
+}
+
+.step > * {
+  margin: 0;
+  min-inline-size: 0;
+}
+
+.step__meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.step__no {
+  color: var(--accent-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-productive-heading-05);
+  font-weight: 300;
+  line-height: 1;
+}
+
+.step .tag {
+  margin: 0;
+}
+
+.step__summary {
+  color: var(--text);
+  font-size: var(--fs-lede);
+  line-height: var(--lh-lede);
+}
+
+.step__detail {
+  max-inline-size: var(--measure);
+  color: var(--text2);
+}
+
+@media (min-width: 48rem) {
+  .step {
+    grid-template-columns: minmax(8rem, 12rem) minmax(0, 1fr);
+    column-gap: var(--space-7);
+    padding: var(--space-7);
+  }
+
+  .step__meta {
+    grid-row: 1 / span 3;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+  }
+
+  .step > :not(.step__meta) {
+    grid-column: 2;
+  }
+}
+
+/* ------------------------------------------------------------------ sections below the story */
+.section > .wrap > h2 {
+  margin-block-end: var(--space-6);
+}
+
+.rules {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.rules > li {
+  margin: 0;
+}
+
+.rule__no {
+  margin-block-end: var(--space-4);
+  color: var(--accent-text);
+  font-family: var(--font-mono);
+  font-size: var(--fs-label-01);
+  letter-spacing: 0.08em;
+}
+
+.faq {
+  border-block-start: var(--border) solid var(--line);
+}
+
+.faq details {
+  border-block-end: var(--border) solid var(--line);
+}
+
+.faq summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  min-block-size: var(--touch-target);
+  padding-block: var(--space-4);
+  font-size: var(--fs-productive-heading-03);
+  line-height: 1.3;
+  list-style: none;
+}
+
+.faq summary::-webkit-details-marker {
+  display: none;
+}
+
+.faq summary::after {
+  content: '';
+  flex: none;
+  inline-size: var(--space-4);
+  block-size: var(--space-4);
+  background:
+    linear-gradient(currentcolor, currentcolor) center / 100% var(--border-strong) no-repeat,
+    linear-gradient(currentcolor, currentcolor) center / var(--border-strong) 100% no-repeat;
+  transition: rotate var(--dur-moderate) var(--ease-expressive);
+}
+
+.faq details[open] summary::after {
+  rotate: 90deg;
+  background-size: 100% var(--border-strong), 0 0;
+}
+
+.faq__a {
+  max-inline-size: var(--measure);
+  padding-block-end: var(--space-5);
+  color: var(--text2);
+}
+
+.faq__a p {
+  margin-block-end: var(--space-3);
+}
+
+/* Scroll reveals: the item rises as it enters (and settles from 98% in the full tier). Nothing here changes opacity
+ * or blurs, so text contrast is the same at every point. Not applied in the static tier or under reduced motion. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    @keyframes reveal {
+      from { translate: 0 2rem; }
+      to { translate: 0 0; }
+    }
+
+    @keyframes reveal-soft {
+      from { translate: 0 2rem; scale: 0.98; }
+      to { translate: 0 0; scale: 1; }
+    }
+
+    html[data-tier='lite'] .reveal,
+    html[data-tier='full'] .reveal {
+      animation: reveal linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 60%;
+    }
+
+    html[data-tier='full'] .reveal {
+      animation-name: reveal-soft;
+    }
+  }
+}
+
+@media (forced-colors: active) {
+  .motif {
+    display: none;
+  }
+}

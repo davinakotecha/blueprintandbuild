@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Submit an idea | Blueprint &amp; Build</title>
+<meta name="description" content="Three short fields, no login: what should we build, the problem and who it is for, and your name if you want credit. Copy it and paste it in the Slack channel.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/plex-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/effects.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/forms.css">
+<link rel="stylesheet" href="css/switch.css">
+<script src="js/mode-boot.js"></script>
+</head>
+<body class="has-grain">
+<header data-site-header class="glass site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head">
+      <p class="eyebrow">Takes about a minute</p>
+      <h1 class="display">Submit an <b>idea</b></h1>
+      <p class="lede">Three short fields and no login. Tell us what to build, who it would help, and your name if you want the credit.</p>
+    </div>
+
+    <div class="submit-grid" data-submit-grid>
+      <section class="card surface form-card" aria-labelledby="form-title">
+        <h2 id="form-title" data-form-title>Your idea</h2>
+        <noscript><p class="notice">The idea form needs JavaScript. Turn it on for this site, or write your idea straight in the Slack channel.</p></noscript>
+
+        <!-- method="dialog": outside a <dialog> a native submit does nothing, so with JavaScript off (or submit.js
+             failing) the typed idea is never put in the address bar or sent anywhere. submit.js handles the real submit. -->
+        <form id="idea-form" method="dialog" novalidate data-idea-form>
+          <div data-error-summary></div>
+
+          <div class="field">
+            <label class="field__label" for="idea">Your idea in one line</label>
+            <p class="field__hint" id="idea-hint">One sentence is plenty.</p>
+            <input type="text" id="idea" name="idea" autocomplete="off" required aria-describedby="idea-hint idea-error">
+            <div class="field__foot">
+              <p class="field__error" id="idea-error" hidden></p>
+              <p class="field__count" data-count="idea"><span aria-hidden="true" data-count-text></span><span class="sr-only" aria-live="polite" data-count-live></span></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="problem">What problem does it solve, and for whom?</label>
+            <p class="field__hint" id="problem-hint">Who has this problem, how often, and what would change if it were solved.</p>
+            <textarea id="problem" name="problem" rows="5" required aria-describedby="problem-hint problem-error"></textarea>
+            <div class="field__foot">
+              <p class="field__error" id="problem-error" hidden></p>
+              <p class="field__count" data-count="problem"><span aria-hidden="true" data-count-text></span><span class="sr-only" aria-live="polite" data-count-live></span></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="name">Your name <span class="field__optional">(optional)</span></label>
+            <p class="field__hint" id="name-hint">So we can credit you if your idea is picked. Leave it blank to stay anonymous.</p>
+            <input type="text" id="name" name="name" autocomplete="name" aria-describedby="name-hint name-error">
+            <div class="field__foot">
+              <p class="field__error" id="name-error" hidden></p>
+              <p class="field__count" data-count="name"><span aria-hidden="true" data-count-text></span><span class="sr-only" aria-live="polite" data-count-live></span></p>
+            </div>
+          </div>
+
+          <div class="hp" aria-hidden="true">
+            <label for="homepage">Leave this field empty</label>
+            <input type="text" id="homepage" name="homepage" tabindex="-1" autocomplete="off">
+          </div>
+
+          <div class="form-actions">
+            <button type="submit" class="btn" data-submit>Copy my idea for Slack</button>
+          </div>
+          <p class="field__hint" id="submit-hint">This form does not send anything. It copies your idea as a message, and you paste it in the Slack channel.</p>
+        </form>
+
+        <div class="idea-success" data-success hidden>
+          <div class="success-mark" aria-hidden="true"></div>
+          <h2 id="success-title" tabindex="-1" data-success-title>Copied</h2>
+          <p class="idea-success__next" data-success-next>Copied: paste it in <span data-channel-name>the Slack channel</span>.</p>
+          <div class="notice" data-manual hidden>
+            <span class="notice__label">Copy this by hand</span>
+            <p>Your browser did not let this page copy for you. Select the message below, copy it, and paste it in the Slack channel.</p>
+            <textarea class="idea-success__message" id="idea-message" rows="6" readonly aria-label="Your idea as a Slack message" data-message></textarea>
+          </div>
+          <div class="btn-row">
+            <a class="btn" href="#" data-open-slack hidden>Open Slack</a>
+            <button type="button" class="btn btn--ghost" data-copy-again>Copy again</button>
+            <button type="button" class="btn btn--ghost" data-again>Write another idea</button>
+          </div>
+        </div>
+        <div class="celebrate" aria-hidden="true" data-celebrate></div>
+      </section>
+
+      <aside class="card glass next-card" aria-labelledby="next-title" data-next hidden>
+        <h2 id="next-title">What happens next</h2>
+        <ol class="next-list" data-next-list></ol>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer data-site-footer class="site-footer"></footer>
+
+<script type="module" src="js/layout.js"></script>
+<script type="module" src="js/submit.js"></script>
+</body>
+</html>

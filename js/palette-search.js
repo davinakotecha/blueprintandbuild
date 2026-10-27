@@ -36,7 +36,7 @@ export function buildIndex(pages, mvps, skills) {
     const id = encode(str(mvp.id));
     if (!id) return;
     const tags = [...list(mvp.tags).filter((tag) => typeof tag === 'string'), str(mvp.type), str(mvp.status)].filter(Boolean);
-    out.push(entry(mvp.title, `catalog.html#${id}`, mvp.sample ? 'MVP (sample)' : 'MVP', str(mvp.problem), tags, i));
+    out.push(entry(mvp.title, `catalog.html#${id}`, 'MVP', str(mvp.problem), tags, i));
   });
   list(skills).forEach((skill, i) => {
     const title = str(skill && (skill.title || skill.name));
@@ -44,7 +44,7 @@ export function buildIndex(pages, mvps, skills) {
     const id = encode(str(skill.id));
     if (!id) return;
     const tags = [str(skill.name), 'skill', 'claude'].filter(Boolean);
-    out.push(entry(title, `skills.html#${id}`, skill.sample ? 'Skill (sample)' : 'Skill', str(skill.description), tags, i));
+    out.push(entry(title, `skills.html#${id}`, 'Skill', str(skill.description), tags, i));
   });
   return out;
 }

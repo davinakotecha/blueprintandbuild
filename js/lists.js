@@ -1,6 +1,6 @@
 /*
- * lists.js. The two things every card page did the same way: fill a card list (or show a placeholder when there is
- * nothing to show) and reveal the "these are samples" note. One bad entry in the data never blanks the list: each
+ * lists.js. What every card page does the same way: fill a card list (or show a placeholder when there is
+ * nothing to show). One bad entry in the data never blanks the list: each
  * card is built on its own, and an entry whose card throws is left out.
  */
 /**
@@ -26,7 +26,7 @@ export function buildCards(items, buildCard, limit = Infinity) {
 /**
  * Puts a card for each item in host and sets data-count (the CSS uses it so a short list fills its row). With no
  * cards it shows placeholder() (a function that returns a node) and a count of 1, or nothing at all if there is no
- * placeholder. Returns the items that got a card (so a page can ask whether any of them is a sample).
+ * placeholder. Returns the items that got a card.
  */
 export function fillList(host, items, buildCard, placeholder, limit = Infinity) {
   if (!host) return [];
@@ -43,19 +43,4 @@ export function fillList(host, items, buildCard, placeholder, limit = Infinity) 
     host.replaceChildren();
   }
   return pairs.map(([item]) => item);
-}
-
-/** True if any entry in the list is flagged `sample: true`. */
-export const hasSample = (items) => Array.isArray(items) && items.some((item) => Boolean(item && item.sample));
-
-/**
- * Shows the page's "these are samples" note when any entry is a sample. The note is the element marked
- * data-sample-note; a page with more than one gives each a value (data-sample-note="results") and passes that as
- * slotName, otherwise slotName is ignored and the one note is used.
- */
-export function revealSampleNote(slotName, anyIsSample) {
-  if (!anyIsSample) return;
-  const named = slotName ? document.querySelector(`[data-sample-note="${CSS.escape(slotName)}"]`) : null;
-  const note = named || document.querySelector('[data-sample-note]');
-  if (note) note.hidden = false;
 }

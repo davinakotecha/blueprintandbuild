@@ -4,7 +4,7 @@
  *   <header data-site-header class="glass site-header"></header>   (CSS reserves its height: no layout shift)
  *   <main id="main"> ... </main>
  *   <footer data-site-footer class="site-footer"></footer>
- * The Slack link and the sample-content notice appear in the footer only when config.json says so.
+ * The Slack link appears in the footer only when config.json has the channel address (or the Slack IDs).
  * The header "Search" button opens the search palette; palette.js is imported only on first use (Ctrl/Cmd+K or a click).
  */
 import { el } from './dom.js';
@@ -12,6 +12,7 @@ import { getData } from './content.js';
 import { init as initMode } from './mode.js';
 import { NAV, FOOTER_LINKS } from './nav-data.js';
 import { channelHref } from './slack.js';
+import { webUrl, externalLink } from './home-cards.js';
 
 const currentPage = () => window.location.pathname.split('/').pop() || 'index.html';
 
@@ -133,22 +134,25 @@ function buildFooter(footer) {
   const links = el('ul', { class: 'site-footer__links' }, FOOTER_LINKS.map(([label, href]) => el('li', {}, link(label, href))));
   const notes = el('div', { class: 'site-footer__notes' });
   footer.replaceChildren(el('div', { class: 'wrap site-footer__inner' }, [
-    el('p', { class: 'site-footer__name mono', text: 'Blueprint & Build · AI & Analytics practice' }),
+    el('p', { class: 'site-footer__name mono', text: 'Blueprint & Build · AI & Analytics practice · Asset Based Consulting · Knowledge Share' }),
     el('nav', { 'aria-label': 'Footer' }, links),
     notes,
   ]));
   return { links, notes };
 }
 
-async function addConfigNotes({ links, notes }) {
+async function addConfigNotes({ links }) {
   const config = await getData('config');
   if (!config) return;
-  const href = channelHref(config);
   const name = config.slack && typeof config.slack.channelName === 'string' ? config.slack.channelName.trim() : '';
-  if (href && name) links.append(el('li', {}, el('a', { href, text: `Join #${name} on Slack` })));
-  if (config.features && config.features.sampleContent === true) {
-    notes.append(el('p', { class: 'site-footer__sample', text: 'Sample content: the MVPs, skills and shortlist shown here are examples.' }));
+  if (!name) return;
+  const web = webUrl(config.links && config.links.slackChannel);
+  if (web) {
+    links.append(el('li', {}, externalLink(web, `Join #${name} on Slack`)));
+    return;
   }
+  const href = channelHref(config);
+  if (href) links.append(el('li', {}, el('a', { href, text: `Join #${name} on Slack` })));
 }
 
 /**

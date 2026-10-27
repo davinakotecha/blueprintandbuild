@@ -1,99 +1,66 @@
 [
   {
-    "id": "2027-07-sample-lessons-search",
-    "title": "Lessons-learned search",
-    "problem": "Lessons from finished projects sit in close-out documents nobody opens again. This script searches a folder of close-out notes for a word and prints the matching lines with the file they came from.",
-    "type": "code",
-    "status": "idea",
-    "tags": [
-      "Data",
-      "Productivity",
-      "Governance"
-    ],
-    "sample": true,
-    "cycle": 4,
-    "ideaOwner": "Sample owner",
-    "download": "downloads/2027-07-sample-lessons-search.zip"
-  },
-  {
-    "id": "2027-05-sample-report-checker",
-    "title": "Report standards checker",
-    "problem": "Reports reach clients with inconsistent layout, naming and accessibility. This checker reads a report's settings and lists what breaks the practice's standards, so the fixes are made before review.",
-    "type": "platform",
-    "status": "building",
-    "tags": [
-      "Reporting",
-      "Governance"
-    ],
-    "sample": true,
-    "cycle": 3,
-    "ideaOwner": "Sample owner",
-    "builders": [
-      "Builder one",
-      "Builder two"
-    ],
-    "download": "downloads/2027-05-sample-report-checker.zip"
-  },
-  {
-    "id": "2027-03-sample-raid-dashboard",
+    "id": "2026-11-raid-log-dashboard",
     "title": "RAID log dashboard",
-    "problem": "Risks, assumptions, issues and dependencies end up scattered across notes and spreadsheets, so nobody sees the whole picture. This dashboard gathers them into one view per project, with owners and what is overdue.",
-    "type": "platform",
-    "status": "live",
-    "tags": [
-      "Reporting",
-      "Governance",
-      "Data"
-    ],
-    "sample": true,
-    "cycle": 2,
-    "ideaOwner": "Sample owner",
-    "builders": [
-      "Builder one",
-      "Builder two"
-    ],
-    "links": {
-      "platform": "https://platform.example.org/sample-raid-dashboard",
-      "demo": "https://video.example.org/sample-raid-dashboard-demo"
-    },
-    "download": "downloads/2027-03-sample-raid-dashboard.zip"
-  },
-  {
-    "id": "2027-01-sample-synthetic-orders",
-    "title": "Synthetic orders for demos",
-    "problem": "Demos and training need realistic order data, and client data is never allowed. This file holds a few made-up orders with regions, products and dates, ready to drop into Excel or Power BI.",
+    "problem": "Risks, assumptions, issues and dependencies sit in design documents, steering packs and notes, so nobody sees the whole picture or where each item came from. A Claude skill builds a RAID log from your documents, with a source and a stated-or-inferred flag on every item, and an offline dashboard shows it.",
     "type": "file",
-    "status": "retired",
-    "tags": [
-      "Data",
-      "Productivity"
-    ],
-    "sample": true,
-    "cycle": 1,
-    "ideaOwner": "Sample owner",
-    "builders": [
-      "Builder one",
-      "Builder two"
-    ],
-    "download": "downloads/2027-01-sample-synthetic-orders.zip"
-  },
-  {
-    "id": "2026-10-mvp-zero",
-    "title": "MVP #0: idea to one-page brief",
-    "problem": "A good idea often stalls because nobody has time to write it up. This Claude skill turns a rough idea into a one-page MVP brief: the problem, who it is for, a five-minute demo and what is out of scope.",
-    "type": "skill",
     "status": "live",
     "tags": [
       "Claude skill",
+      "Governance",
+      "Reporting",
+      "Asset Based Consulting",
       "Productivity"
     ],
-    "sample": true,
     "cycle": 0,
-    "ideaOwner": "Sample owner",
+    "ideaOwner": "Blueprint & Build team",
     "builders": [
-      "Builder one",
-      "Builder two"
+      "Davina Kotecha",
+      "Owen Rogan"
     ],
-    "download": "downloads/2026-10-mvp-zero.zip"
+    "demo": "demos/raid-dashboard.html",
+    "download": "downloads/2026-11-raid-log-dashboard.zip"
+  },
+  {
+    "id": "2026-11-lessons-learned",
+    "title": "Lessons learned report",
+    "problem": "Lessons from finished projects sit in close-out documents nobody opens again, and when they are written up nobody can tell what is evidence and what is opinion. A Claude skill turns project documents into a lessons file, and an offline report shows the top lessons, the causes and the exact words behind each one.",
+    "type": "file",
+    "status": "live",
+    "tags": [
+      "Claude skill",
+      "Governance",
+      "Knowledge Share",
+      "Reporting",
+      "Productivity"
+    ],
+    "cycle": 0,
+    "ideaOwner": "Blueprint & Build team",
+    "builders": [
+      "Davina Kotecha",
+      "Owen Rogan"
+    ],
+    "demo": "demos/lessons-report.html",
+    "download": "downloads/2026-11-lessons-learned.zip"
+  },
+  {
+    "id": "2026-11-idea-to-brief",
+    "title": "Idea to one-page brief",
+    "problem": "A good idea often stalls because nobody has time to write it up. This MVP turns a rough idea into the one-page brief the builders need: the problem, who has it, a ten-minute demo, the data and what is out of scope. Use the brief builder on the Submit page, or the Claude skill.",
+    "type": "skill",
+    "status": "live",
+    "tags": [
+      "Asset Based Consulting",
+      "Claude skill",
+      "Productivity"
+    ],
+    "cycle": 0,
+    "ideaOwner": "Blueprint & Build team",
+    "builders": [
+      "Davina Kotecha",
+      "Owen Rogan"
+    ],
+    "demo": "submit.html",
+    "download": "downloads/2026-11-idea-to-brief.zip"
   }
 ]

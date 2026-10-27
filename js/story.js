@@ -30,7 +30,7 @@ import { el } from './dom.js';
 import { getTier, onTierChange } from './tier.js';
 
 const host = document.querySelector('[data-scroll-story]');
-const MONTH = { blueprint: 'Blueprint month', build: 'Build month' };
+const MONTH = { blueprint: 'Blueprint', build: 'Build' };
 const LINK_HREF = /^[a-z0-9-]+\.html(#[a-z0-9-]+)?$/; // a page of this site, optionally with an #id: never a scheme, a slash or ..
 const LINE = 0.4; // the reading line, as a share of the window height: the last step whose top has passed it is the active one
 const reduce = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -86,7 +86,7 @@ function render(how, builders, config, cards) {
       el('div', { class: 'story__body' }, el('ol', { class: 'steps' }, steps.map(stepItem))),
     ])));
   } else {
-    const missing = 'The step-by-step guide is not available right now. In short: ideas are open all the time, the practice votes in Slack, and two builders ship the winner.';
+    const missing = 'The step-by-step guide is not available right now. In short: ideas are open all the time, the practice votes in Slack for ten days, and two builders ship the winner.';
     parts.push(block('story-title', 'The cycle, step by step', none('Steps are on the way', missing)));
   }
   if (rules.length) {
@@ -105,7 +105,7 @@ function render(how, builders, config, cards) {
     parts.push(block('faq-title', 'Questions people ask', el('div', { class: 'faq' }, entries)));
   }
   // One bad builder entry (null, a number) is skipped, never allowed to stop the steps, rules and FAQ above from drawing.
-  const people = cards ? list(builders).filter((b) => b && typeof b === 'object').slice(0, 2) : [];
+  const people = cards ? list(builders).filter((b) => b && typeof b === 'object').slice(0, 4) : [];
   const built = people.map((b) => {
     try {
       return cards.builderCard(b, config);

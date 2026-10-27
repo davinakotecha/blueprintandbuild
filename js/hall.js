@@ -1,15 +1,17 @@
 /*
- * hall.js (frontend-builder). Fills the Hall of fame from mvps.json, builders.json, cycle.json and config.json
+ * hall.js (frontend-builder). Fills the Hall of fame from mvps.json, builders.json, cycles.json and config.json
  * only (no data file of its own). Winners are the live MVPs, newest cycle first, each with its cycle, the idea
  * owner's credit, the builders and a link to the catalog card. With no winner yet it says so and when the first
- * one is announced (cycle.nextDrop). Sample entries are marked. DOM is built with el() and textContent only, and
- * one malformed entry is skipped instead of blanking the page.
+ * cycle's MVP Drop is (from the calendar). The Knowledge Share card links to the practice's Box folder
+ * (config.links.box) and shows "link coming soon" until that address is set. DOM is built with el() and textContent
+ * only, and one malformed entry is skipped instead of blanking the page.
  */
 import { getData } from './content.js';
 import { el, slot, text, list } from './dom.js';
-import { builderCard, placeholderCard, cardLink, actionLabel } from './home-cards.js';
+import { builderCard, placeholderCard, cardLink, actionLabel, webUrl, externalLink } from './home-cards.js';
 import { shortDate } from './dates.js';
 import { fillList } from './lists.js';
+import { locate, todayIso } from './cycles.js';
 
 /** Live MVPs, newest cycle first (an MVP with no cycle goes last), then by id, newest first. */
 function winnersOf(mvps) {
@@ -24,8 +26,7 @@ function winnerCard(mvp) {
   const builders = list(mvp.builders);
   return el('article', { class: 'card surface winner' }, [
     el('ul', { class: 'tag-list', 'aria-label': 'Labels' }, [
-      el('li', {}, el('span', { class: 'tag', text: Number.isFinite(mvp.cycle) ? `Cycle ${mvp.cycle}` : 'Winner' })),
-      mvp.sample ? el('li', {}, el('span', { class: 'tag', text: 'Sample' })) : null,
+      el('li', {}, el('span', { class: 'tag', text: Number.isFinite(mvp.cycle) && mvp.cycle > 0 ? `Cycle ${mvp.cycle}` : 'Launch set' })),
     ]),
     el('h3', { text: text(mvp.title) }),
     (owner || builders.length) ? el('dl', { class: 'credit' }, [
@@ -41,18 +42,17 @@ function winnerCard(mvp) {
   ]);
 }
 
-/** "The first winner is announced at MVP Drop #1 on 28 Jan." (or a shorter line if the cycle has no date yet). */
-function firstWinnerLine(cycle) {
-  const date = cycle ? shortDate(cycle.nextDrop) : '';
-  const number = cycle && Number.isFinite(cycle.cycle) ? ` #${cycle.cycle}` : '';
-  return `The first winner is announced at MVP Drop${number}${date ? ` on ${date}` : ''}.`;
+/** "The first cycle's MVP Drop is on 26 Feb." (or nothing if there is no calendar). */
+function nextDropLine(cycles) {
+  const here = locate(cycles, todayIso());
+  return here.dropCycle ? `The next MVP Drop is on ${shortDate(here.dropCycle.drop)}.` : '';
 }
 
 function note(title, message) {
   return el('article', { class: 'card surface hall-note' }, [el('h3', { text: title }), el('p', { text: message })]);
 }
 
-function fillWinners(mvps, cycle) {
+function fillWinners(mvps, cycles) {
   const host = slot('winners');
   const noteHost = slot('note');
   if (!host) return;
@@ -61,15 +61,26 @@ function fillWinners(mvps, cycle) {
     return;
   }
   const winners = winnersOf(mvps);
-  const real = winners.filter((mvp) => !mvp.sample);
-  if (noteHost && !real.length) {
-    noteHost.replaceChildren(note(
-      winners.length ? 'No real winner yet' : 'No winner yet',
-      `${firstWinnerLine(cycle)}${winners.length ? ' The entries below are samples that show how this page will look.' : ' Until then, the best thing you can do is send in an idea.'}`,
-    ));
+  if (noteHost && !winners.length) {
+    noteHost.replaceChildren(note('No winner yet', `${nextDropLine(cycles)} Until then, the best thing you can do is send in an idea.`.trim()));
   }
   fillList(host, winners, winnerCard, null);
   if (host.dataset.count) host.dataset.count = String(Math.min(Number(host.dataset.count), 3));
+}
+
+/** The Knowledge Share library: a Box folder where every MVP and its documents are kept. A placeholder until the address is set. */
+function fillLibrary(config) {
+  const host = slot('library');
+  if (!host) return;
+  const href = webUrl(config && config.links && config.links.box);
+  host.replaceChildren(el('article', { class: 'card surface hall-library' }, [
+    el('span', { class: 'tag tag--b', text: 'Knowledge Share' }),
+    el('h3', { text: 'The MVP library on Box' }),
+    el('p', { text: 'Every MVP and its documents are stored in one shared Box folder, so the practice can reuse them on engagements. This is where the Asset Based Consulting library lives.' }),
+    el('div', { class: 'card__foot' }, href
+      ? externalLink(href, 'Open the Box folder', 'btn', 'Open the Box folder')
+      : el('span', { class: 'btn-note', text: 'Box link coming soon' })),
+  ]));
 }
 
 function fillBuilders(builders, config) {
@@ -84,8 +95,9 @@ function fillBuilders(builders, config) {
 }
 
 async function start() {
-  const [mvps, builders, cycle, config] = await Promise.all(['mvps', 'builders', 'cycle', 'config'].map(getData));
-  fillWinners(mvps, cycle);
+  const [mvps, builders, cycles, config] = await Promise.all(['mvps', 'builders', 'cycles', 'config'].map(getData));
+  fillWinners(mvps, cycles);
+  fillLibrary(config);
   fillBuilders(builders, config);
 }
 

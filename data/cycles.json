@@ -1,0 +1,698 @@
+[
+  {
+    "cycle": 1,
+    "title": "Cycle 1",
+    "start": "2027-01-04",
+    "drop": "2027-02-26",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2027-01-04",
+        "end": "2027-01-15"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2027-01-18",
+        "end": "2027-01-22"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2027-01-25",
+        "end": "2027-02-26"
+      }
+    ]
+  },
+  {
+    "cycle": 2,
+    "title": "Cycle 2",
+    "start": "2027-03-01",
+    "drop": "2027-04-30",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2027-03-01",
+        "end": "2027-03-12"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2027-03-15",
+        "end": "2027-03-19"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2027-03-22",
+        "end": "2027-04-30"
+      }
+    ]
+  },
+  {
+    "cycle": 3,
+    "title": "Cycle 3",
+    "start": "2027-05-04",
+    "drop": "2027-07-02",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2027-05-04",
+        "end": "2027-05-17"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2027-05-18",
+        "end": "2027-05-24"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2027-05-25",
+        "end": "2027-07-02"
+      }
+    ]
+  },
+  {
+    "cycle": 4,
+    "title": "Cycle 4",
+    "start": "2027-07-05",
+    "drop": "2027-09-03",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2027-07-05",
+        "end": "2027-07-16"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2027-07-19",
+        "end": "2027-07-23"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2027-07-26",
+        "end": "2027-09-03"
+      }
+    ]
+  },
+  {
+    "cycle": 5,
+    "title": "Cycle 5",
+    "start": "2027-09-06",
+    "drop": "2027-10-29",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2027-09-06",
+        "end": "2027-09-17"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2027-09-20",
+        "end": "2027-09-24"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2027-09-27",
+        "end": "2027-10-29"
+      }
+    ]
+  },
+  {
+    "cycle": 6,
+    "title": "Cycle 6",
+    "start": "2027-11-01",
+    "drop": "2027-12-31",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2027-11-01",
+        "end": "2027-11-12"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2027-11-15",
+        "end": "2027-11-19"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2027-11-22",
+        "end": "2027-12-31"
+      }
+    ]
+  },
+  {
+    "cycle": 7,
+    "title": "Cycle 7",
+    "start": "2028-01-04",
+    "drop": "2028-03-03",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2028-01-04",
+        "end": "2028-01-17"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2028-01-18",
+        "end": "2028-01-24"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2028-01-25",
+        "end": "2028-03-03"
+      }
+    ]
+  },
+  {
+    "cycle": 8,
+    "title": "Cycle 8",
+    "start": "2028-03-06",
+    "drop": "2028-04-28",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2028-03-06",
+        "end": "2028-03-17"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2028-03-20",
+        "end": "2028-03-24"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2028-03-27",
+        "end": "2028-04-28"
+      }
+    ]
+  },
+  {
+    "cycle": 9,
+    "title": "Cycle 9",
+    "start": "2028-05-02",
+    "drop": "2028-06-30",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2028-05-02",
+        "end": "2028-05-15"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2028-05-16",
+        "end": "2028-05-22"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2028-05-23",
+        "end": "2028-06-30"
+      }
+    ]
+  },
+  {
+    "cycle": 10,
+    "title": "Cycle 10",
+    "start": "2028-07-03",
+    "drop": "2028-09-01",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2028-07-03",
+        "end": "2028-07-14"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2028-07-17",
+        "end": "2028-07-21"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2028-07-24",
+        "end": "2028-09-01"
+      }
+    ]
+  },
+  {
+    "cycle": 11,
+    "title": "Cycle 11",
+    "start": "2028-09-04",
+    "drop": "2028-11-03",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2028-09-04",
+        "end": "2028-09-15"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2028-09-18",
+        "end": "2028-09-22"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2028-09-25",
+        "end": "2028-11-03"
+      }
+    ]
+  },
+  {
+    "cycle": 12,
+    "title": "Cycle 12",
+    "start": "2028-11-06",
+    "drop": "2028-12-29",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2028-11-06",
+        "end": "2028-11-17"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2028-11-20",
+        "end": "2028-11-24"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2028-11-27",
+        "end": "2028-12-29"
+      }
+    ]
+  },
+  {
+    "cycle": 13,
+    "title": "Cycle 13",
+    "start": "2029-01-02",
+    "drop": "2029-03-02",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2029-01-02",
+        "end": "2029-01-15"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2029-01-16",
+        "end": "2029-01-22"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2029-01-23",
+        "end": "2029-03-02"
+      }
+    ]
+  },
+  {
+    "cycle": 14,
+    "title": "Cycle 14",
+    "start": "2029-03-05",
+    "drop": "2029-05-04",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2029-03-05",
+        "end": "2029-03-16"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2029-03-19",
+        "end": "2029-03-23"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2029-03-26",
+        "end": "2029-05-04"
+      }
+    ]
+  },
+  {
+    "cycle": 15,
+    "title": "Cycle 15",
+    "start": "2029-05-08",
+    "drop": "2029-06-29",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2029-05-08",
+        "end": "2029-05-21"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2029-05-22",
+        "end": "2029-05-29"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2029-05-30",
+        "end": "2029-06-29"
+      }
+    ]
+  },
+  {
+    "cycle": 16,
+    "title": "Cycle 16",
+    "start": "2029-07-02",
+    "drop": "2029-08-31",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2029-07-02",
+        "end": "2029-07-13"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2029-07-16",
+        "end": "2029-07-20"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2029-07-23",
+        "end": "2029-08-31"
+      }
+    ]
+  },
+  {
+    "cycle": 17,
+    "title": "Cycle 17",
+    "start": "2029-09-03",
+    "drop": "2029-11-02",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2029-09-03",
+        "end": "2029-09-14"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2029-09-17",
+        "end": "2029-09-21"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2029-09-24",
+        "end": "2029-11-02"
+      }
+    ]
+  },
+  {
+    "cycle": 18,
+    "title": "Cycle 18",
+    "start": "2029-11-05",
+    "drop": "2030-01-04",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2029-11-05",
+        "end": "2029-11-16"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2029-11-19",
+        "end": "2029-11-23"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2029-11-26",
+        "end": "2030-01-04"
+      }
+    ]
+  },
+  {
+    "cycle": 19,
+    "title": "Cycle 19",
+    "start": "2030-01-07",
+    "drop": "2030-03-01",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2030-01-07",
+        "end": "2030-01-18"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2030-01-21",
+        "end": "2030-01-25"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2030-01-28",
+        "end": "2030-03-01"
+      }
+    ]
+  },
+  {
+    "cycle": 20,
+    "title": "Cycle 20",
+    "start": "2030-03-04",
+    "drop": "2030-05-03",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2030-03-04",
+        "end": "2030-03-15"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2030-03-18",
+        "end": "2030-03-22"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2030-03-25",
+        "end": "2030-05-03"
+      }
+    ]
+  },
+  {
+    "cycle": 21,
+    "title": "Cycle 21",
+    "start": "2030-05-07",
+    "drop": "2030-06-28",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2030-05-07",
+        "end": "2030-05-20"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2030-05-21",
+        "end": "2030-05-28"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2030-05-29",
+        "end": "2030-06-28"
+      }
+    ]
+  },
+  {
+    "cycle": 22,
+    "title": "Cycle 22",
+    "start": "2030-07-01",
+    "drop": "2030-08-30",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2030-07-01",
+        "end": "2030-07-12"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2030-07-15",
+        "end": "2030-07-19"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2030-07-22",
+        "end": "2030-08-30"
+      }
+    ]
+  },
+  {
+    "cycle": 23,
+    "title": "Cycle 23",
+    "start": "2030-09-02",
+    "drop": "2030-11-01",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2030-09-02",
+        "end": "2030-09-13"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2030-09-16",
+        "end": "2030-09-20"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2030-09-23",
+        "end": "2030-11-01"
+      }
+    ]
+  },
+  {
+    "cycle": 24,
+    "title": "Cycle 24",
+    "start": "2030-11-04",
+    "drop": "2031-01-03",
+    "phases": [
+      {
+        "id": "vote",
+        "label": "Vote",
+        "stage": "blueprint",
+        "start": "2030-11-04",
+        "end": "2030-11-15"
+      },
+      {
+        "id": "scope",
+        "label": "Blueprint with the idea owner",
+        "stage": "blueprint",
+        "start": "2030-11-18",
+        "end": "2030-11-22"
+      },
+      {
+        "id": "build",
+        "label": "Build the MVP",
+        "stage": "build",
+        "start": "2030-11-25",
+        "end": "2031-01-03"
+      }
+    ]
+  }
+]

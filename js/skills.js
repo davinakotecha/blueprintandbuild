@@ -11,7 +11,7 @@ import { copyButton } from './clipboard.js';
 import {
   skillCard, placeholderCard, focusTarget, webUrl, externalLink, safeSkillName,
 } from './home-cards.js';
-import { fillList, hasSample, revealSampleNote } from './lists.js';
+import { fillList } from './lists.js';
 
 const LINK_LABEL = { claudeSkillsHelp: 'Read the Claude Help Center guide' };
 
@@ -96,13 +96,12 @@ async function start() {
   const disclosure = section ? buildInstall(section, install, config && config.links) : null;
   if (disclosure) wireInstall(disclosure);
 
-  const shown = fillList(
+  fillList(
     slot('skills'),
     skills,
     (skill) => skillCard(skill, { detail: true }),
     () => placeholderCard('Skills are on the way', 'Practice skills will be listed here, each with a download and an example prompt.'),
   );
-  revealSampleNote('skills', hasSample(shown));
   if (window.location.hash) focusTarget();
   window.addEventListener('hashchange', focusTarget);
 }

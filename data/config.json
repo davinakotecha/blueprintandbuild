@@ -8,13 +8,14 @@
     "channelName": "blueprint-and-build"
   },
   "links": {
-    "claudeSkillsHelp": "https://support.claude.com/en/articles/12512180-use-skills-in-claude"
+    "claudeSkillsHelp": "https://support.claude.com/en/articles/12512180-use-skills-in-claude",
+    "slackChannel": "https://ibm.enterprise.slack.com/archives/C0CBELCSXDF",
+    "box": ""
   },
   "defaultMode": "standard",
   "features": {
     "slackForm": false,
     "slackLinks": false,
-    "practiceRepoSync": false,
-    "sampleContent": true
+    "practiceRepoSync": false
   }
 }

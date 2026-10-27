@@ -1,13 +1,13 @@
 {
   "howItWorks": {
-    "intro": "Every two months the practice turns one idea into a working tool. In the Blueprint month you share ideas, vote on a shortlist of three, and the winner is scoped; in the Build month two builders ship it and play it back to everyone.",
+    "intro": "Blueprint & Build is how the practice does Asset Based Consulting: every two months we turn one idea into a reusable asset. Ideas are always open. Each cycle opens with a 10-day vote, then the winner is blueprinted with the person who sent it, and two builders ship it in the time that is left.",
     "steps": [
       {
         "id": "ideas",
         "month": "blueprint",
-        "title": "Share an idea",
-        "summary": "The idea form is always open, so anyone in the practice can submit an idea at any time.",
-        "detail": "Fill in three fields in under a minute: your idea in one line, the problem it solves and for whom, and your name if you want credit. No GitHub account or login is needed. The builders ask for any missing detail in the Slack thread later.",
+        "title": "Share an idea, any time",
+        "summary": "The idea form is always open. Every idea joins a backlog, and the best ones are brought into the next cycle.",
+        "detail": "Use the brief builder: your idea in one line, the problem and who has it, up to three things the MVP does, a ten-minute demo, the data and what is out of scope. No GitHub account or login is needed. There is no cut-off, so an idea sent today waits in the backlog for the next shortlist.",
         "link": {
           "label": "Submit an idea",
           "href": "submit.html"
@@ -16,16 +16,16 @@
       {
         "id": "triage",
         "month": "blueprint",
-        "title": "Triage in 30 minutes",
-        "summary": "The two builders score every new idea in one short session.",
-        "detail": "Each idea is scored from 1 to 5 on impact, feasibility, reusability and showcase value, with impact and feasibility counting double. The data check is pass or fail: only internal, public or synthetic data gets through. The top three become the shortlist."
+        "title": "Triage the backlog",
+        "summary": "Before each vote opens, the two builders score the backlog in one short session.",
+        "detail": "Each idea is scored from 1 to 5 on impact, feasibility, reusability and showcase value, with impact and feasibility counting double. The data check is pass or fail: only internal, public or synthetic data gets through. The top three become the shortlist, and the rest stay in the backlog."
       },
       {
         "id": "vote",
         "month": "blueprint",
-        "title": "Vote in Slack",
+        "title": "Vote for 10 days",
         "summary": "The practice picks the winner from the shortlist of three with a reaction emoji in Slack.",
-        "detail": "Voting stays open for 5 working days in the Slack channel, with one reminder and a mention on the practice call. The idea with the most reactions wins, and ties go to the higher feasibility score. Runners-up stay in the backlog and are shortlisted again automatically next cycle, once. Results and turnout are published on this site.",
+        "detail": "Voting stays open for 10 working days in the Slack channel, with one reminder and a mention on the practice call. The idea with the most reactions wins, and ties go to the higher feasibility score. Runners-up stay in the backlog and are shortlisted again automatically next cycle, once. Results and turnout are published on this site.",
         "link": {
           "label": "See the shortlist",
           "href": "vote.html"
@@ -34,23 +34,23 @@
       {
         "id": "scope",
         "month": "blueprint",
-        "title": "Scope it with the owner",
-        "summary": "The winning idea is scoped with the person who suggested it.",
+        "title": "Blueprint with the owner",
+        "summary": "The winning idea is scoped with the person who suggested it, in the week after the vote.",
         "detail": "The builders and the idea owner agree what a demoable slice looks like, and anything that does not fit is logged as v2. The aim is something two builders can finish in about 6 person-days."
       },
       {
         "id": "build",
         "month": "build",
         "title": "Build it",
-        "summary": "Two builders build the winner across the first three weeks of the Build month.",
-        "detail": "The build takes about 6 person-days, shared by the two builders. The idea owner is invited to test it first, and anything unfinished is cut back to a slice that can be demoed."
+        "summary": "Two builders build the winner across the rest of the two-month cycle.",
+        "detail": "The build takes about 6 person-days, shared by the two builders. The idea owner is invited to test it first, and anything unfinished is cut back to a slice that can be demoed. The builders also write down what they learn, so it is shared through Knowledge Share."
       },
       {
         "id": "drop",
         "month": "build",
         "title": "Ship and MVP Drop",
-        "summary": "The MVP ships with docs and a demo video, then is played back live to the practice.",
-        "detail": "In the fourth week the builders test it, write the README and record a demo video. At the start of the next cycle it is played back in a 20-minute MVP Drop, then added to the catalog as Live, and the next round of ideas opens.",
+        "summary": "The MVP ships with docs and a demo, then is played back live to the practice.",
+        "detail": "In the last week the builders test it, write the README and record a demo. On the last working day of the cycle it is played back in a 20-minute MVP Drop, then added to the catalog as Live, and the next cycle starts with its own vote.",
         "link": {
           "label": "Browse the catalog",
           "href": "catalog.html"
@@ -60,11 +60,11 @@
     "rules": [
       {
         "title": "About 6 person-days",
-        "text": "An MVP has to be buildable in about 6 person-days, shared by two builders across the Build month."
+        "text": "An MVP has to be buildable in about 6 person-days, shared by two builders across the build stage of a cycle."
       },
       {
-        "title": "Demoable in 5 minutes",
-        "text": "If it cannot be shown working in 5 minutes, it is too big or too vague for one cycle."
+        "title": "Demoable in 10 minutes",
+        "text": "If it cannot be shown working in 10 minutes, it is too big or too vague for one cycle."
       },
       {
         "title": "No client data",
@@ -80,17 +80,29 @@
       },
       {
         "title": "Bigger ideas wait",
-        "text": "Anything bigger goes to a Productionise shortlist (a longer-term list for bigger ideas that deserve proper investment), not the Build month."
+        "text": "Anything bigger goes to a Productionise shortlist (a longer-term list for bigger ideas that deserve proper investment), not the build stage."
       }
     ],
     "faq": [
       {
         "q": "What counts as an MVP here?",
-        "a": "A small working tool that two builders can make in about 6 person-days and demo in 5 minutes. It can be a script, a tool hosted on an internal platform, a spreadsheet or Power BI file, or a Claude skill."
+        "a": "A small working tool that two builders can make in about 6 person-days and demo in 10 minutes. It can be a script, a tool hosted on an internal platform, a spreadsheet or Power BI file, or a Claude skill."
+      },
+      {
+        "q": "What is Asset Based Consulting?",
+        "a": "Building something reusable once, so every engagement can start from it instead of from a blank page. Each MVP is an asset: a skill, a dashboard or a template that the practice can take into client work, as long as it was built on internal, public or synthetic data."
+      },
+      {
+        "q": "What is Knowledge Share?",
+        "a": "Passing on what we learn. Every MVP ships with a short guide, and the builders share the lessons from each cycle with the practice. The Hall of fame links to a Box folder where the MVPs and their documents are kept."
       },
       {
         "q": "Who can submit an idea?",
-        "a": "Anyone in the practice. The form is always open and takes under a minute. Your name is optional, but giving it means the idea owner gets the credit."
+        "a": "Anyone in the practice, at any time. The form is always open and your idea joins the backlog. Your name is optional, but giving it means the idea owner gets the credit."
+      },
+      {
+        "q": "When does a cycle start?",
+        "a": "Every two months, on the first Monday of January, March, May, July, September and November (the next working day if that Monday is a bank holiday). The vote runs for 10 working days, the Blueprint with the idea owner takes the next 5, and the build fills the rest of the two months. The Vote page shows the dates for the current cycle."
       },
       {
         "q": "Do I need a GitHub account?",
@@ -110,17 +122,17 @@
       },
       {
         "q": "How do I install a Claude skill?",
-        "a": "Download the skill's zip from the Claude Skills page, then upload it in the Claude app, copy it into Claude Code's skills folder, or ask your organisation owner to provision it. The How to install panel on that page has the steps."
+        "a": "Download the skill's zip from the Claude Skills page and upload it in the Claude app, or use Copy for Claude Code to paste the skill straight into Claude Code. The How to install panel on that page has the steps."
       },
       {
         "q": "Can I volunteer to build?",
-        "a": "Yes, ask in the Slack channel. The aim is for one volunteer to join each Build month as a guest builder, to learn alongside the two regular builders."
+        "a": "Yes, ask in the Slack channel. The aim is for one volunteer to join each cycle as a guest builder, to learn alongside the two regular builders."
       }
     ]
   },
   "vote": {
     "points": [
-      "Voting stays open for 5 working days, with one reminder in the channel and a mention on the practice call.",
+      "Voting stays open for 10 working days, with one reminder in the channel and a mention on the practice call.",
       "You vote with a reaction emoji on the idea you want, in the Slack channel. No login beyond Slack.",
       "The idea with the most reactions wins.",
       "Ties go to the idea with the higher feasibility score from triage.",
@@ -129,21 +141,21 @@
     ]
   },
   "install": {
-    "intro": "A skill is a folder with a SKILL.md file that teaches Claude a repeatable task. Download its zip from the card, then use whichever of these fits how you work.",
+    "intro": "A skill is a folder with a SKILL.md file that teaches Claude a repeatable task. Use whichever of these fits how you work.",
     "steps": [
       {
         "title": "Claude app",
-        "text": "Download the zip. In Claude, go to Customize > Skills and choose Upload a skill, then pick the zip. Skills you upload are private to you.",
+        "text": "Download the zip from the skill's card. In Claude, go to Customize > Skills and choose Upload a skill, then pick the zip. Skills you upload are private to you.",
         "linkKey": "claudeSkillsHelp"
       },
       {
-        "title": "Claude Code",
-        "text": "Unzip the download. The unzipped folder that contains SKILL.md is the skill folder (skill-folder in the commands below). Copy it into ~/.claude/skills/ to use it in every project, or into .claude/skills/ inside one repo (run those two commands from that repo's folder) to use it there only.",
-        "code": "# for all your projects\nmkdir -p ~/.claude/skills\ncp -r skill-folder ~/.claude/skills/\n\n# for one repo only\nmkdir -p .claude/skills\ncp -r skill-folder .claude/skills/"
+        "title": "Claude Code: copy and paste",
+        "text": "Press Copy for Claude Code on the skill's card, then paste into Claude Code. It contains the whole skill and asks Claude Code to save it in ~/.claude/skills/, so it works in every project. Nothing to download or unzip."
       },
       {
-        "title": "Team or Enterprise plans",
-        "text": "Ask your Claude organisation owner to provision the practice skills organisation-wide. They then appear for everyone, with no uploading."
+        "title": "Claude Code: from the zip",
+        "text": "Unzip the download. The unzipped folder that contains SKILL.md is the skill folder (skill-folder in the commands below). Copy it into ~/.claude/skills/ to use it in every project, or into .claude/skills/ inside one repo (run those two commands from that repo's folder) to use it there only.",
+        "code": "# for all your projects\nmkdir -p ~/.claude/skills\ncp -r skill-folder ~/.claude/skills/\n\n# for one repo only\nmkdir -p .claude/skills\ncp -r skill-folder .claude/skills/"
       }
     ]
   }

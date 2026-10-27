@@ -1,75 +1,91 @@
 /*
- * vote.js (frontend-builder A). The vote page: the shortlist from cycle.json as cards, a countdown worked out in
- * the browser from the `vote` phase in cycle.phases, and a "Vote in Slack" button that exists only when
- * config.features.slackLinks is true and the Slack team and channel IDs are set. Otherwise a note says voting
- * happens in Slack when it opens. "How the vote works" comes from pages.json (`vote.points`) and the whole block is
- * hidden when there are none. The countdown is recomputed at most once a minute and the text is only rewritten
- * when it changes, so the live region speaks once a day at most. DOM is built with createElement and textContent.
+ * vote.js (frontend-builder A). The vote page: the shortlist for the cycle whose vote is next or running (cycle.json
+ * `shortlists`, keyed by cycle number), a countdown worked out in the browser from the calendar (cycles.json) and
+ * today's date, and a "Vote in the Slack channel" button that links to config.links.slackChannel (an https address) or,
+ * if that is empty, to the Slack app link when the team and channel IDs are set. "How the vote works" comes from
+ * pages.json (`vote.points`) and the whole block is hidden when there are none. The countdown is recomputed at most
+ * once a minute and the text is only rewritten when it changes, so the live region speaks once a day at most.
+ * DOM is built with createElement and textContent.
  */
 import { getData } from './content.js';
 import { el, slot, text, list, attempt } from './dom.js';
-import { placeholderCard } from './home-cards.js';
+import { placeholderCard, webUrl, externalLink } from './home-cards.js';
 import { channelHref } from './slack.js';
 import { shortDate, daysFromToday, rangeText } from './dates.js';
-import { fillList, hasSample, revealSampleNote } from './lists.js';
+import { fillList } from './lists.js';
+import { voteWindow, todayIso } from './cycles.js';
 
 const NOTE_NO_SLACK = 'You vote with a reaction in the Slack channel when the window opens. There is nothing to do until then.';
 const MINUTE = 60 * 1000;
 
 const days = (n) => `${n} ${n === 1 ? 'day' : 'days'}`;
 
-/** The countdown sentence for the vote phase, or '' when the cycle has no usable vote phase. */
-function countdownText(phase) {
+/** The countdown sentence for the vote phase, or '' when there is no usable vote phase. */
+function countdownText({ phase, cycle, closed }) {
   if (!phase) return '';
   const untilStart = daysFromToday(phase.start);
   const untilEnd = daysFromToday(phase.end);
   if (untilStart === null || untilEnd === null) return '';
-  if (untilStart > 0) return `Voting opens in ${days(untilStart)} (${shortDate(phase.start)})`;
+  const name = text(cycle.title);
+  if (untilStart > 0) {
+    const before = closed ? `${text(closed.title)} voting has closed. ` : '';
+    return `${before}${name} voting opens in ${days(untilStart)} (${shortDate(phase.start)})`;
+  }
   if (untilEnd >= 0) {
     const when = untilEnd === 0 ? 'today' : `in ${days(untilEnd)}`;
-    return `Voting closes ${when} (${shortDate(phase.end)})`;
+    return `${name} voting closes ${when} (${shortDate(phase.end)})`;
   }
-  return 'Voting has closed';
+  return `${name} voting has closed`;
 }
 
-function ideaCard(idea, index, href) {
+function ideaCard(idea, index, link) {
   const title = text(idea.title) || 'Untitled idea';
   return el('article', { class: 'card surface idea' }, [
     el('ul', { class: 'tag-list', 'aria-label': 'Labels' }, [
       el('li', {}, el('span', { class: 'tag tag--b', text: `Idea ${String.fromCharCode(65 + index)}` })),
-      idea.sample ? el('li', {}, el('span', { class: 'tag', text: 'Sample' })) : null,
     ]),
     el('h3', { text: title }),
     el('p', { text: text(idea.pitch) }),
-    href ? el('div', { class: 'card__foot' }, el('a', { class: 'btn', href }, [
-      'Vote in Slack', el('span', { class: 'sr-only', text: ` for ${title}` }),
-    ])) : null,
+    link ? el('div', { class: 'card__foot' }, link(title)) : null,
   ]);
 }
 
-function showShortlist(cycle, href) {
-  const shown = fillList(
-    slot('shortlist'),
-    cycle ? cycle.shortlist : null,
-    (idea, index) => ideaCard(idea, index, href),
-    () => placeholderCard('The shortlist is not set yet', 'It appears here once the builders have narrowed the ideas to three.'),
-  );
-  revealSampleNote('shortlist', hasSample(shown));
+/** The "Vote in Slack" control for one card: an https link to the channel (new tab), else the Slack app link, else nothing. */
+function voteLink(config) {
+  const web = webUrl(config && config.links && config.links.slackChannel);
+  if (web) return (title) => externalLink(web, 'Vote in Slack', 'btn', `Vote in Slack for ${title}`);
+  const app = attempt(() => channelHref(config));
+  if (app) return (title) => el('a', { class: 'btn', href: app }, ['Vote in Slack', el('span', { class: 'sr-only', text: ` for ${title}` })]);
+  return null;
 }
 
-function showCountdown(cycle) {
-  const phase = cycle && Array.isArray(cycle.phases) ? cycle.phases.find((item) => item && item.id === 'vote') : null;
+function showShortlist(cycle, windowInfo, link) {
+  const target = windowInfo && windowInfo.cycle;
+  const items = target && cycle && cycle.shortlists ? cycle.shortlists[String(target.cycle)] : null;
+  const opens = windowInfo ? shortDate(windowInfo.phase.start) : '';
+  fillList(
+    slot('shortlist'),
+    items,
+    (idea, index) => ideaCard(idea, index, link),
+    () => placeholderCard(
+      'The shortlist is not set yet',
+      `Ideas are always open. Before each vote the builders pick the top three from the backlog${opens ? `; the next vote opens on ${opens}` : ''}. Send an idea in and it is in the running.`,
+    ),
+  );
+}
+
+function showCountdown(windowInfo) {
   const target = document.querySelector('[data-countdown]');
   const dates = document.querySelector('[data-vote-dates]');
-  if (!phase) {
+  if (!windowInfo || !windowInfo.phase) {
     target.textContent = '';
     target.hidden = true;
     return;
   }
-  const range = rangeText(phase.start, phase.end);
+  const range = rangeText(windowInfo.phase.start, windowInfo.phase.end);
   if (dates && range) dates.textContent = range;
   const update = () => {
-    const next = countdownText(phase);
+    const next = countdownText(windowInfo);
     if (target.textContent !== next) target.textContent = next;
     target.hidden = !next;
   };
@@ -87,17 +103,31 @@ function showPoints(pages) {
   block.hidden = !points.length;
 }
 
+/** The channel link under "How the vote works", so people can find where the vote happens. */
+function showChannel(config) {
+  const host = document.querySelector('[data-channel]');
+  if (!host) return;
+  const web = webUrl(config && config.links && config.links.slackChannel);
+  const name = config && config.slack && typeof config.slack.channelName === 'string' ? config.slack.channelName.trim() : '';
+  const label = name ? `#${name}` : 'the Slack channel';
+  host.replaceChildren(...(web
+    ? ['Voting happens in ', externalLink(web, label, 'text-link', `Open ${label} in Slack`), '. Open it to cast your vote.']
+    : [`Voting happens in ${label} on Slack.`]));
+}
+
 async function start() {
-  const [cycle, config, pages] = await Promise.all([getData('cycle'), getData('config'), getData('pages')]);
-  const href = attempt(() => channelHref(config));
+  const [cycle, cycles, config, pages] = await Promise.all([getData('cycle'), getData('cycles'), getData('config'), getData('pages')]);
+  const windowInfo = voteWindow(cycles, todayIso());
+  const link = voteLink(config);
   const note = document.querySelector('[data-slack-note]');
   if (note) {
     note.textContent = NOTE_NO_SLACK;
-    note.hidden = Boolean(href);
+    note.hidden = Boolean(link);
   }
   showPoints(pages);
-  showShortlist(cycle, href);
-  showCountdown(cycle);
+  showChannel(config);
+  showShortlist(cycle, windowInfo, link);
+  showCountdown(windowInfo);
 }
 
 start();

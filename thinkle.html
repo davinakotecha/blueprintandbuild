@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>IBM Thinkle | Blueprint &amp; Build</title>
+<meta name="description" content="Knowledge Share: IBM Thinkle, a daily word game on the language of AI, consulting and IBM. One puzzle every weekday, with a short explainer after each answer.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preload" href="fonts/plex-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="css/tokens.css">
+<link rel="stylesheet" href="css/base.css">
+<link rel="stylesheet" href="css/effects.css">
+<link rel="stylesheet" href="css/layout.css">
+<link rel="stylesheet" href="css/components.css">
+<link rel="stylesheet" href="css/thinkle.css">
+<link rel="stylesheet" href="css/switch.css">
+<script src="js/mode-boot.js"></script>
+</head>
+<body class="has-grain">
+<header data-site-header class="glass site-header"></header>
+
+<main id="main">
+  <div class="wrap">
+    <div class="page-head page-head--listing">
+      <p class="eyebrow">Knowledge Share · a new puzzle every weekday</p>
+      <h1 class="display">IBM <b>Thinkle</b></h1>
+      <div class="page-intro">
+        <p class="lede">Guess the AI, consulting or IBM term in six tries. Every answer comes with a short explainer on what it means and why it matters to clients.</p>
+        <p class="page-note">A new word appears at midnight on weekdays, and weekends repeat Friday. Your streak and stats stay in your own browser, and nothing is sent anywhere. Share your result in Slack or Teams as an emoji grid.</p>
+        <noscript><p class="notice">The game needs JavaScript. Turn it on for this site to play.</p></noscript>
+      </div>
+    </div>
+
+    <section class="thinkle" aria-labelledby="game-title" data-thinkle>
+      <h2 id="game-title" class="sr-only">Play IBM Thinkle</h2>
+      <!-- The game is a self-contained page of its own (its own Carbon theme and keyboard handling), so it runs in a frame:
+           no styles or scripts can clash with this site. thinkle.js gives it focus so typing works at once. -->
+      <iframe class="thinkle__frame" title="IBM Thinkle, the daily word game" src="thinkle/game.html" loading="lazy" allow="clipboard-write" data-thinkle-frame></iframe>
+      <p class="thinkle__fallback" data-thinkle-fallback hidden>The game could not be loaded here. <a class="text-link" href="thinkle/game.html">Open it on its own page</a>.</p>
+      <p class="thinkle__tools">
+        <a class="text-link" href="thinkle/game.html">Open full screen</a>
+        <button type="button" class="btn btn--ghost" data-thinkle-focus>Click here, then type to play</button>
+      </p>
+    </section>
+  </div>
+</main>
+
+<footer data-site-footer class="site-footer"></footer>
+
+<script type="module" src="js/layout.js"></script>
+<script type="module" src="js/thinkle.js"></script>
+</body>
+</html>

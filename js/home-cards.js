@@ -68,6 +68,9 @@ export function sitePath(value, prefix = '') {
   }
 }
 
+/** An email address, or '' (one @, no spaces or angle brackets): it goes in a mailto: link, so it must be plain. */
+export const emailAddress = (value) => (/^[A-Za-z0-9._%+-]+@[A-Za-z0-9-]+(?:\.[A-Za-z0-9-]+)+$/.test(text(value)) ? text(value) : '');
+
 export function placeholderCard(title, message) {
   return el('article', { class: 'card' }, [
     el('span', { class: 'tag tag--b', text: 'Coming soon' }),
@@ -106,7 +109,15 @@ const downloadLink = (file, title) => el('a', {
 });
 const comingSoon = () => el('span', { class: 'btn-note', text: 'Link coming soon' });
 
+/** The MVP's own live demo: a page of this site (a viewer in demos/, or a page such as submit.html), opened in the same tab. */
+const demoHref = (mvp) => {
+  const raw = text(mvp.demo);
+  return /^(?:demos\/)?[a-z0-9][a-z0-9-]*\.html$/.test(raw) ? sitePath(raw) : '';
+};
+
 function mvpPrimary(mvp, file, platform, title) {
+  const demo = demoHref(mvp);
+  if (demo) return el('a', { class: 'btn', href: demo, text: 'Open live demo', 'aria-label': actionLabel('Open live demo', title) });
   if (mvp.type === 'platform') return platform ? externalLink(platform, 'Open', 'btn', actionLabel('Open', title)) : comingSoon();
   return file ? downloadLink(file, title) : comingSoon();
 }
@@ -123,15 +134,17 @@ export function mvpCard(mvp, { detail = false } = {}) {
   const file = sitePath(mvp.download, 'downloads/');
   const platform = webUrl(mvp.links && mvp.links.platform);
   const demo = detail ? webUrl(mvp.links && mvp.links.demo) : '';
-  const tags = list(mvp.tags).filter((tag) => tag.toLowerCase() !== 'sample');
-  const target = platform || absolute(file || cardLink('catalog.html', mvp.id));
+  const tags = list(mvp.tags);
+  const target = platform || absolute(demoHref(mvp) || file || cardLink('catalog.html', mvp.id));
   const title = text(mvp.title) || 'Untitled MVP';
+  // With a live demo the primary button opens it, so the zip becomes a second button (it is the same file the drag gesture saves).
+  const zip = demoHref(mvp) && file ? downloadLink(file, title) : null;
+  if (zip) zip.className = 'btn btn--ghost';
 
   const card = el('article', { class: 'card surface', id: cardId(mvp.id) }, [
     el('ul', { class: 'tag-list', 'aria-label': 'Status and type' }, [
       el('li', {}, el('span', { class: 'tag', text: labelOf(STATUS_LABEL, mvp.status, 'MVP') })),
       el('li', {}, el('span', { class: 'tag tag--b', text: labelOf(TYPE_LABEL, mvp.type, 'MVP') })),
-      mvp.sample ? el('li', {}, el('span', { class: 'tag', text: 'Sample' })) : null,
     ]),
     el('h3', { text: title }),
     el('p', { text: text(mvp.problem) }),
@@ -139,6 +152,7 @@ export function mvpCard(mvp, { detail = false } = {}) {
     tags.length ? el('p', { class: 'card__meta', text: tags.join(' · ') }) : null,
     el('div', { class: 'card__foot' }, [
       mvpPrimary(mvp, file, platform, title),
+      zip,
       demo ? externalLink(demo, 'Watch demo', 'btn btn--ghost', actionLabel('Watch demo', title)) : null,
       copyButton({ label: 'Copy link', text: target, message: 'Link copied', ariaLabel: actionLabel('Copy link', title) }),
     ]),
@@ -147,15 +161,34 @@ export function mvpCard(mvp, { detail = false } = {}) {
   return card;
 }
 
-/** What "Copy for Claude Code" copies. The skill's name goes in only if it is a plain folder name. */
-function installHint(skill) {
+/**
+ * What "Copy for Claude Code" copies: a prompt to paste into Claude Code that carries the whole SKILL.md, so Claude Code
+ * saves it to ~/.claude/skills/<name>/SKILL.md itself. Nothing is fetched, so it works offline and from any host. (It used
+ * to copy only a hint that named no address, which left Claude Code with nothing to install.) The skill's name goes in only
+ * if it is a plain folder name, and the file text is fenced with more backticks than it contains, so it cannot end the fence.
+ * Without the file text it falls back to a short hint that points at the zip.
+ */
+export function installPrompt(skill) {
   const name = safeSkillName(skill.name);
-  const folder = name || 'skill-folder';
+  const body = typeof skill.markdown === 'string' ? skill.markdown.replace(/\r\n/g, '\n').trim() : '';
   const prompt = text(skill.examplePrompt);
+  if (!name || !body) {
+    return [
+      `Install ${name ? `the Claude skill "${name}"` : 'this Claude skill'}: unzip it into ~/.claude/skills/${name || 'skill-folder'}/ (all projects) or .claude/skills/${name || 'skill-folder'}/ (one repo).`,
+      prompt ? `Then try: ${prompt}` : '',
+    ].filter(Boolean).join('\n');
+  }
+  const longest = Math.max(2, ...(body.match(/`+/g) || []).map((run) => run.length));
+  const fence = '`'.repeat(longest + 1);
   return [
-    `Install ${name ? `the Claude skill "${name}"` : 'this Claude skill'}: unzip it into ~/.claude/skills/${folder}/ (all projects) or .claude/skills/${folder}/ (one repo).`,
-    prompt ? `Then try: ${prompt}` : '',
-  ].filter(Boolean).join('\n');
+    `Please install this Claude skill for me. Create the file ~/.claude/skills/${name}/SKILL.md (make the folder if it does not exist) containing exactly the text between the fences below, and change nothing in it. Then tell me where you saved it.`,
+    '',
+    `${fence}markdown`,
+    body,
+    fence,
+    '',
+    prompt ? `When it is saved, try it with: ${prompt}` : 'When it is saved, tell me what the skill does and how to use it.',
+  ].join('\n');
 }
 
 export function skillCard(skill, { detail = false } = {}) {
@@ -165,7 +198,6 @@ export function skillCard(skill, { detail = false } = {}) {
   const card = el('article', { class: 'card surface', id: cardId(skill.id) }, [
     el('ul', { class: 'tag-list', 'aria-label': 'Labels' }, [
       el('li', {}, el('span', { class: 'tag tag--b', text: 'Claude skill' })),
-      skill.sample ? el('li', {}, el('span', { class: 'tag', text: 'Sample' })) : null,
     ]),
     el('h3', { text: title }),
     el('p', { text: text(skill.description) }),
@@ -176,7 +208,7 @@ export function skillCard(skill, { detail = false } = {}) {
       file ? downloadLink(file, title) : el('span', { class: 'btn-note', text: 'Download coming soon' }),
       copyButton({
         label: 'Copy for Claude Code',
-        text: () => installHint(skill),
+        text: () => installPrompt(skill),
         message: 'Copied for Claude Code',
         ariaLabel: actionLabel('Copy for Claude Code', title),
       }),
@@ -211,20 +243,31 @@ export function focusTarget() {
 
 const initialsOf = (name) => (text(name) || '?').split(/\s+/).map((part) => part[0]).join('').slice(0, 2).toUpperCase();
 
+/**
+ * A builder's card: photo (or initials), role, blurb and how to reach them. The Slack button is the person's profile link
+ * (an https address, opened in a new tab) when the data has one, else the Slack app link when the IDs are configured.
+ * The email address is shown as text and as a mailto: button, so it can be copied even where mail links do nothing.
+ */
 export function builderCard(builder, config) {
   const photo = sitePath(builder.photo);
-  const href = attempt(() => userHref(config, builder.slackUserId));
   const name = text(builder.name) || 'Builder';
-  const avatar = el('span', { class: 'avatar', 'aria-hidden': 'true' },
-    photo ? el('img', { src: photo, alt: '', width: '44', height: '44', loading: 'lazy' }) : text(builder.initials) || initialsOf(builder.name));
-  return el('article', { class: 'card surface' }, [
+  const email = emailAddress(builder.email);
+  const profile = webUrl(builder.slackUrl);
+  const appHref = profile ? '' : attempt(() => userHref(config, builder.slackUserId));
+  const avatar = el('span', { class: 'avatar avatar--lg', 'aria-hidden': 'true' },
+    photo ? el('img', { src: photo, alt: '', width: '96', height: '96', loading: 'lazy' }) : text(builder.initials) || initialsOf(builder.name));
+  const actions = [
+    email ? el('a', { class: 'btn', href: `mailto:${email}`, text: 'Email', 'aria-label': actionLabel('Email', name) }) : null,
+    profile ? externalLink(profile, 'Message on Slack', 'btn btn--ghost', actionLabel('Message on Slack', name)) : null,
+    appHref ? el('a', { class: 'btn btn--ghost', href: appHref, text: 'Message on Slack', 'aria-label': actionLabel('Message on Slack', name) }) : null,
+  ].filter(Boolean);
+  return el('article', { class: 'card surface builder' }, [
     el('div', { class: 'person' }, [
       avatar,
       el('div', {}, [el('h3', { text: name }), el('p', { class: 'card__meta', text: text(builder.role) })]),
     ]),
     text(builder.blurb) ? el('p', { text: text(builder.blurb) }) : null,
-    href ? el('div', { class: 'card__foot' }, el('a', {
-      class: 'btn btn--ghost', href, text: 'Message on Slack', 'aria-label': actionLabel('Message on Slack', name),
-    })) : null,
+    email ? el('p', { class: 'builder__email mono' }, el('a', { href: `mailto:${email}`, text: email })) : null,
+    actions.length ? el('div', { class: 'card__foot' }, actions) : null,
   ]);
 }

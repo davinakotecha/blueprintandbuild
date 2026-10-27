@@ -8,7 +8,7 @@
 import { getData } from './content.js';
 import { el, slot } from './dom.js';
 import { mvpCard, placeholderCard, focusTarget } from './home-cards.js';
-import { buildCards, fillList, hasSample, revealSampleNote } from './lists.js';
+import { buildCards, fillList } from './lists.js';
 import {
   NO_FILTERS, facetsOf, readState, toSearch, isFiltered, applyFilters, filterBar,
 } from './filters.js';
@@ -29,7 +29,7 @@ function emptyState(onClear) {
   ]);
 }
 
-const noMvps = () => placeholderCard('MVPs are on the way', 'The first MVP lands at the end of the Build month. Until then, send in an idea.');
+const noMvps = () => placeholderCard('MVPs are on the way', 'The first MVPs land at the end of the build stage. Until then, send in an idea.');
 
 /**
  * Keeps the address bar in step with the filters. The new address is relative to the current one (./catalog.html?...),
@@ -63,7 +63,6 @@ async function start() {
     fillList(results, [], null, noMvps);
     return;
   }
-  revealSampleNote('mvps', hasSample(mvps));
 
   const facets = facetsOf(mvps);
   const cards = new Map(pairs);

@@ -207,6 +207,26 @@ html[data-mode='davina'] .tag:not(.tag--b) {
   object-fit: cover;
 }
 
+/* A line of context under a section heading. */
+.section-intro {
+  max-inline-size: var(--measure);
+  margin: calc(var(--space-4) * -1) 0 var(--space-6);
+  color: var(--text2);
+}
+
+/* The builder cards show a real photo, so their avatar is larger than the 44px touch size. */
+.avatar--lg {
+  inline-size: 4.5rem;
+  block-size: 4.5rem;
+  border: var(--border-strong) solid var(--line);
+}
+
+.builder__email {
+  margin: 0;
+  overflow-wrap: anywhere;
+  font-size: var(--fs-label-01);
+}
+
 .person {
   display: flex;
   align-items: center;

@@ -374,10 +374,6 @@ html[data-tier] .site-header {
   column-gap: var(--space-6);
 }
 
-.site-footer__sample {
-  max-inline-size: var(--measure);
-}
-
 /* The build date: small and quiet, but readable (it is the way to tell that the live site has updated). */
 .site-footer__notes {
   display: grid;

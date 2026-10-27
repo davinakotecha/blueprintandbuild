@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Submit an idea | Blueprint &amp; Build</title>
-<meta name="description" content="Three short fields, no login: what should we build, the problem and who it is for, and your name if you want credit. Copy it and paste it in the Slack channel.">
+<meta name="description" content="Ideas are always open. Fill in the one-page MVP brief, copy it, and paste it in the Slack channel to join the backlog. Asset Based Consulting starts with a good idea.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/plex-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
@@ -22,15 +22,15 @@
 <main id="main">
   <div class="wrap">
     <div class="page-head">
-      <p class="eyebrow">Takes about a minute</p>
+      <p class="eyebrow">Always open · about five minutes</p>
       <h1 class="display">Submit an <b>idea</b></h1>
-      <p class="lede">Three short fields and no login. Tell us what to build, who it would help, and your name if you want the credit.</p>
+      <p class="lede">Ideas are open all the time and join a backlog. Before each vote the builders pick the top three. Fill in this one-page brief so they can judge your idea in two minutes. No login needed.</p>
     </div>
 
     <div class="submit-grid" data-submit-grid>
       <section class="card surface form-card" aria-labelledby="form-title">
-        <h2 id="form-title" data-form-title>Your idea</h2>
-        <noscript><p class="notice">The idea form needs JavaScript. Turn it on for this site, or write your idea straight in the Slack channel.</p></noscript>
+        <h2 id="form-title" data-form-title>Your one-page brief</h2>
+        <noscript><p class="notice">The brief builder needs JavaScript. Turn it on for this site, or write your idea straight in the Slack channel using the headings in the idea-to-brief MVP.</p></noscript>
 
         <!-- method="dialog": outside a <dialog> a native submit does nothing, so with JavaScript off (or submit.js
              failing) the typed idea is never put in the address bar or sent anywhere. submit.js handles the real submit. -->
@@ -48,12 +48,66 @@
           </div>
 
           <div class="field">
-            <label class="field__label" for="problem">What problem does it solve, and for whom?</label>
+            <label class="field__label" for="problem">What problem does it solve, and who has it?</label>
             <p class="field__hint" id="problem-hint">Who has this problem, how often, and what would change if it were solved.</p>
-            <textarea id="problem" name="problem" rows="5" required aria-describedby="problem-hint problem-error"></textarea>
+            <textarea id="problem" name="problem" rows="4" required aria-describedby="problem-hint problem-error"></textarea>
             <div class="field__foot">
               <p class="field__error" id="problem-error" hidden></p>
               <p class="field__count" data-count="problem"><span aria-hidden="true" data-count-text></span><span class="sr-only" aria-live="polite" data-count-live></span></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="does">What does the MVP do?</label>
+            <p class="field__hint" id="does-hint">Up to three things, one per line. Each is something a person can see or do.</p>
+            <textarea id="does" name="does" rows="3" required aria-describedby="does-hint does-error"></textarea>
+            <div class="field__foot">
+              <p class="field__error" id="does-error" hidden></p>
+              <p class="field__count" data-count="does"><span aria-hidden="true" data-count-text></span><span class="sr-only" aria-live="polite" data-count-live></span></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="demo">The ten-minute demo</label>
+            <p class="field__hint" id="demo-hint">What the audience sees, step by step. If it cannot be shown working in ten minutes, it is too big for one cycle.</p>
+            <textarea id="demo" name="demo" rows="4" required aria-describedby="demo-hint demo-error"></textarea>
+            <div class="field__foot">
+              <p class="field__error" id="demo-error" hidden></p>
+              <p class="field__count" data-count="demo"><span aria-hidden="true" data-count-text></span><span class="sr-only" aria-live="polite" data-count-live></span></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <fieldset class="choice" aria-describedby="data-hint data-error">
+              <legend class="field__label">What data would it use?</legend>
+              <p class="field__hint" id="data-hint">Never client data. An idea that needs it does not pass the data check.</p>
+              <label class="choice__item"><input type="radio" name="data" value="internal"> Internal data only</label>
+              <label class="choice__item"><input type="radio" name="data" value="public"> Public data only</label>
+              <label class="choice__item"><input type="radio" name="data" value="synthetic"> Synthetic (made-up) data only</label>
+              <label class="choice__item"><input type="radio" name="data" value="client"> It needs client data</label>
+            </fieldset>
+            <div class="field__foot">
+              <p class="field__error" id="data-error" hidden></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="outOfScope">Out of scope for now <span class="field__optional">(optional)</span></label>
+            <p class="field__hint" id="outOfScope-hint">Two or three things you are deliberately leaving out.</p>
+            <textarea id="outOfScope" name="outOfScope" rows="2" aria-describedby="outOfScope-hint outOfScope-error"></textarea>
+            <div class="field__foot">
+              <p class="field__error" id="outOfScope-error" hidden></p>
+              <p class="field__count" data-count="outOfScope"><span aria-hidden="true" data-count-text></span><span class="sr-only" aria-live="polite" data-count-live></span></p>
+            </div>
+          </div>
+
+          <div class="field">
+            <label class="field__label" for="effort">Could two people ship it in about six days? <span class="field__optional">(optional)</span></label>
+            <p class="field__hint" id="effort-hint">Yes, no or maybe, and why. The builders will check it too.</p>
+            <textarea id="effort" name="effort" rows="2" aria-describedby="effort-hint effort-error"></textarea>
+            <div class="field__foot">
+              <p class="field__error" id="effort-error" hidden></p>
+              <p class="field__count" data-count="effort"><span aria-hidden="true" data-count-text></span><span class="sr-only" aria-live="polite" data-count-live></span></p>
             </div>
           </div>
 
@@ -73,9 +127,9 @@
           </div>
 
           <div class="form-actions">
-            <button type="submit" class="btn" data-submit>Copy my idea for Slack</button>
+            <button type="submit" class="btn" data-submit>Copy my brief for Slack</button>
           </div>
-          <p class="field__hint" id="submit-hint">This form does not send anything. It copies your idea as a message, and you paste it in the Slack channel.</p>
+          <p class="field__hint" id="submit-hint">This form does not send anything. It copies your brief as a message, and you paste it in the Slack channel.</p>
         </form>
 
         <div class="idea-success" data-success hidden>
@@ -85,11 +139,12 @@
           <div class="notice" data-manual hidden>
             <span class="notice__label">Copy this by hand</span>
             <p>Your browser did not let this page copy for you. Select the message below, copy it, and paste it in the Slack channel.</p>
-            <textarea class="idea-success__message" id="idea-message" rows="6" readonly aria-label="Your idea as a Slack message" data-message></textarea>
           </div>
+          <textarea class="idea-success__message" id="idea-message" rows="10" readonly aria-label="Your brief as a Slack message" data-message></textarea>
           <div class="btn-row">
-            <a class="btn" href="#" data-open-slack hidden>Open Slack</a>
+            <a class="btn" href="#" data-open-slack hidden target="_blank" rel="noopener noreferrer" data-external>Open Slack</a>
             <button type="button" class="btn btn--ghost" data-copy-again>Copy again</button>
+            <button type="button" class="btn btn--ghost" data-download>Download as .md</button>
             <button type="button" class="btn btn--ghost" data-again>Write another idea</button>
           </div>
         </div>
@@ -99,6 +154,7 @@
       <aside class="card glass next-card" aria-labelledby="next-title" data-next hidden>
         <h2 id="next-title">What happens next</h2>
         <ol class="next-list" data-next-list></ol>
+        <p class="field__hint">Prefer to talk it through with Claude first? The idea-to-brief skill writes this same brief from a rough idea. <a class="text-link" href="catalog.html#2026-11-idea-to-brief">Get the skill</a>.</p>
       </aside>
     </div>
   </div>

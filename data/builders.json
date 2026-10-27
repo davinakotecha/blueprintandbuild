@@ -1,16 +1,22 @@
 [
   {
-    "id": "builder-one",
-    "name": "Builder one",
-    "role": "Builder",
-    "initials": "B1",
-    "blurb": "Profile coming soon."
+    "id": "davina-kotecha",
+    "name": "Davina Kotecha",
+    "role": "Builder, AI & Analytics practice",
+    "initials": "DK",
+    "blurb": "",
+    "photo": "img/builders/davina-kotecha.webp",
+    "email": "davina.kotecha@ibm.com",
+    "slackUrl": "https://ibm.enterprise.slack.com/team/U03JFFDESJE"
   },
   {
-    "id": "builder-two",
-    "name": "Builder two",
-    "role": "Builder",
-    "initials": "B2",
-    "blurb": "Profile coming soon."
+    "id": "owen-rogan",
+    "name": "Owen Rogan",
+    "role": "Builder, AI & Analytics practice",
+    "initials": "OR",
+    "blurb": "",
+    "photo": "img/builders/owen-rogan.webp",
+    "email": "owen.rogan@ibm.com",
+    "slackUrl": "https://ibm.enterprise.slack.com/team/U072BN9PF1D"
   }
 ]

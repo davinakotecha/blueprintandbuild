@@ -1,21 +1,28 @@
 /*
- * submit.js (frontend-builder B). Wires the idea form: character counters, validation messages, the error
- * summary, the honeypot, the call to adapters/ideas.js and the success state. No network call is made here;
- * the adapter is the only thing that decides where an idea goes. DOM text is set with textContent only.
+ * submit.js (frontend-builder B). Wires the one-page brief form: character counters, validation messages, the error
+ * summary, the honeypot, the call to adapters/ideas.js and the success state (copy, copy again, download as .md). No
+ * network call is made here; the adapter is the only thing that decides where an idea goes. DOM text is set with
+ * textContent only.
  */
 import { el } from './dom.js';
 import { getData } from './content.js';
-import { LIMITS, submitIdea } from './adapters/ideas.js';
+import { LIMITS, MAX_BULLETS, submitIdea } from './adapters/ideas.js';
 import { announce, copyText } from './clipboard.js';
 import { openChannelHref } from './slack.js';
+import { webUrl } from './home-cards.js';
 import { getTier } from './tier.js';
 
-const FIELDS = ['idea', 'problem', 'name'];
+const TEXT_FIELDS = ['idea', 'problem', 'does', 'demo', 'outOfScope', 'effort', 'name'];
+const FIELDS = [...TEXT_FIELDS, 'data'];
+const REQUIRED = new Set(['idea', 'problem', 'does', 'demo', 'data']);
 const NEAR = 0.9;
+// "does" is a list of bullets: its limit is the length of the longest line, not of the whole box.
+const LIMIT_OF = { ...LIMITS, does: LIMITS.does * MAX_BULLETS + 2 };
 
 const form = document.querySelector('[data-idea-form]');
 const $ = (id) => document.getElementById(id);
-const value = (field) => $(field).value.trim();
+const value = (field) => (field === 'data' ? (form.elements.data.value || '') : $(field).value.trim());
+const control = (field) => (field === 'data' ? form.querySelector('fieldset') : $(field));
 
 const state = { pending: false };
 
@@ -26,21 +33,21 @@ const counter = (field) => document.querySelector(`[data-count="${field}"]`);
 
 function level(field) {
   const length = $(field).value.length;
-  if (length > LIMITS[field]) return 'over';
-  return length >= LIMITS[field] * NEAR ? 'near' : 'ok';
+  if (length > LIMIT_OF[field]) return 'over';
+  return length >= LIMIT_OF[field] * NEAR ? 'near' : 'ok';
 }
 
 function spoken(field) {
   const length = $(field).value.length;
-  const left = LIMITS[field] - length;
-  if (left < 0) return `${-left} characters over the limit of ${LIMITS[field]}.`;
+  const left = LIMIT_OF[field] - length;
+  if (left < 0) return `${-left} characters over the limit of ${LIMIT_OF[field]}.`;
   if (level(field) === 'near') return `${left} characters left.`;
-  return `${length} of ${LIMITS[field]} characters.`;
+  return `${length} of ${LIMIT_OF[field]} characters.`;
 }
 
 function paint(field) {
   const box = counter(field);
-  box.querySelector('[data-count-text]').textContent = `${$(field).value.length} / ${LIMITS[field]}`;
+  box.querySelector('[data-count-text]').textContent = `${$(field).value.length} / ${LIMIT_OF[field]}`;
   const now = level(field);
   box.classList.toggle('is-near', now === 'near');
   box.classList.toggle('is-over', now === 'over');
@@ -74,22 +81,25 @@ function showFieldError(field, message) {
   const node = errorNode(field);
   node.textContent = message;
   node.hidden = false;
-  $(field).setAttribute('aria-invalid', 'true');
+  control(field).setAttribute('aria-invalid', 'true');
 }
 
 function clearFieldError(field) {
   const node = errorNode(field);
   node.textContent = '';
   node.hidden = true;
-  $(field).removeAttribute('aria-invalid');
+  control(field).removeAttribute('aria-invalid');
 }
 
 /** After a failed submit, an error goes away as soon as the field is fixed (the adapter checks again on send). */
 function clearFixed(field) {
-  if ($(field).getAttribute('aria-invalid') !== 'true') return;
+  if (control(field).getAttribute('aria-invalid') !== 'true') return;
   const length = value(field).length;
-  const required = field !== 'name';
-  if (length <= LIMITS[field] && (length > 0 || !required)) {
+  const bullets = field === 'does' ? value(field).split(/\r?\n/).filter((line) => line.trim()) : [];
+  const fine = field === 'does'
+    ? bullets.length > 0 && bullets.length <= MAX_BULLETS && bullets.every((line) => line.trim().length <= LIMITS.does)
+    : field === 'data' ? value(field) !== 'client' && length > 0 : length <= LIMITS[field] && (length > 0 || !REQUIRED.has(field));
+  if (fine) {
     clearFieldError(field);
     refreshSummary();
   }
@@ -97,9 +107,13 @@ function clearFixed(field) {
 
 function refreshSummary() {
   const host = document.querySelector('[data-error-summary]');
-  const remaining = FIELDS.filter((field) => $(field).getAttribute('aria-invalid') === 'true');
+  const remaining = FIELDS.filter((field) => control(field).getAttribute('aria-invalid') === 'true');
   if (!remaining.length) host.replaceChildren();
   else host.querySelectorAll('li').forEach((item) => { item.hidden = !remaining.includes(item.dataset.field); });
+}
+
+function focusField(field) {
+  (field === 'data' ? form.querySelector('input[name="data"]') : $(field)).focus();
 }
 
 function showSummary(errors) {
@@ -109,7 +123,7 @@ function showSummary(errors) {
     const link = el('a', { href: `#${field}`, text: errors[field] });
     link.addEventListener('click', (event) => {
       event.preventDefault();
-      $(field).focus();
+      focusField(field);
     });
     return el('li', { 'data-field': field }, link);
   });
@@ -173,15 +187,21 @@ function showSuccess(name, result) {
 let lastMessage = '';
 let config = null;
 
-/** The channel's name (and an "Open Slack" button) come from config.json. The button needs team and channel IDs. */
+/** The channel's name and an "Open Slack" button come from config.json: the https channel address, else the app link. */
 function applyConfig() {
   const name = config && config.slack && typeof config.slack.channelName === 'string' ? config.slack.channelName.trim() : '';
   const label = name ? `#${name}` : 'the Slack channel';
   document.querySelector('[data-channel-name]').textContent = label;
   const open = document.querySelector('[data-open-slack]');
-  const href = openChannelHref(config);
+  const web = webUrl(config && config.links && config.links.slackChannel);
+  const href = web || openChannelHref(config);
   open.hidden = !href;
   if (href) open.setAttribute('href', href);
+  if (!web) {
+    open.removeAttribute('target');
+    open.removeAttribute('rel');
+    open.removeAttribute('data-external');
+  }
 }
 
 async function copyAgain() {
@@ -189,9 +209,22 @@ async function copyAgain() {
   announce(ok ? 'Copied again.' : 'Could not copy. Select the message and copy it by hand.');
 }
 
+/** Saves the brief as a Markdown file, for people who would rather attach it or keep it. Nothing is uploaded. */
+function download() {
+  const markdown = lastMessage.replace(/\*([^*\n]+)\*/g, '**$1**').replace(/^• /gm, '- ');
+  const url = URL.createObjectURL(new Blob([`${markdown}\n`], { type: 'text/markdown' }));
+  const link = el('a', { href: url, download: 'mvp-brief.md', class: 'sr-only' });
+  document.body.append(link);
+  link.click();
+  link.remove();
+  window.setTimeout(() => URL.revokeObjectURL(url), 1000);
+  announce('Downloaded mvp-brief.md.');
+}
+
 function again() {
   form.reset();
-  FIELDS.forEach((field) => { clearFieldError(field); paint(field); counter(field).querySelector('[data-count-live]').textContent = ''; });
+  FIELDS.forEach((field) => { clearFieldError(field); });
+  TEXT_FIELDS.forEach((field) => { paint(field); counter(field).querySelector('[data-count-live]').textContent = ''; });
   document.querySelector('[data-error-summary]').replaceChildren();
   document.querySelector('[data-success]').hidden = true;
   window.clearTimeout(confettiTimer);
@@ -215,7 +248,16 @@ async function onSubmit(event) {
       showSuccess('', { copied: true, message: '' });
       return;
     }
-    const result = await submitIdea({ idea: value('idea'), problem: value('problem'), name: value('name') });
+    const result = await submitIdea({
+      idea: value('idea'),
+      problem: value('problem'),
+      does: value('does').split(/\r?\n/),
+      demo: value('demo'),
+      data: value('data'),
+      outOfScope: value('outOfScope'),
+      effort: value('effort'),
+      name: value('name'),
+    });
     if (result && result.ok) showSuccess(value('name'), result);
     else showErrors((result && result.errors) || { idea: 'Something went wrong. Please try again.' });
   } catch {
@@ -223,7 +265,7 @@ async function onSubmit(event) {
   } finally {
     state.pending = false;
     button.disabled = false;
-    button.textContent = 'Copy my idea for Slack';
+    button.textContent = 'Copy my brief for Slack';
   }
 }
 
@@ -241,10 +283,12 @@ async function fillNext() {
 
 function start() {
   if (!form) return;
-  FIELDS.forEach(wireCounter);
+  TEXT_FIELDS.forEach(wireCounter);
+  form.querySelectorAll('input[name="data"]').forEach((radio) => radio.addEventListener('change', () => clearFixed('data')));
   form.addEventListener('submit', onSubmit);
   document.querySelector('[data-again]').addEventListener('click', again);
   document.querySelector('[data-copy-again]').addEventListener('click', copyAgain);
+  document.querySelector('[data-download]').addEventListener('click', download);
   fillNext();
   getData('config').then((data) => { config = data; applyConfig(); });
 }

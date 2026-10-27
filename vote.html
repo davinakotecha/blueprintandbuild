@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Vote | Blueprint &amp; Build</title>
-<meta name="description" content="The shortlist for this cycle and a countdown to when voting opens and closes.">
+<meta name="description" content="The shortlist for this cycle, a countdown to when the 10-day vote opens and closes, and how to vote in the Slack channel.">
 <link rel="icon" href="favicon.svg" type="image/svg+xml">
 <link rel="preload" href="fonts/plex-sans-var-latin.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="stylesheet" href="css/tokens.css">
@@ -25,7 +25,7 @@
       <p class="eyebrow">Blueprint &amp; Build</p>
       <!-- SLOT creative-dev (kinetic headline): add data-kinetic to this h1 when the shared kinetic script is ready. -->
       <h1 class="display">Vote</h1>
-      <p class="lede">The shortlist for this cycle and a countdown to when voting opens and closes.</p>
+      <p class="lede">The shortlist for this cycle and a countdown to when the 10-day vote opens and closes. Ideas themselves are always open: send yours in any time.</p>
     </div>
 
     <noscript><p class="notice">The shortlist and the countdown are loaded with JavaScript. Turn JavaScript on for this site to see them.</p></noscript>
@@ -36,8 +36,6 @@
       <p class="vote-note" data-slack-note hidden></p>
     </section>
 
-    <p class="notice notice--page" data-sample-note hidden>This shortlist is a sample, so you can see how the vote will look. The real shortlist replaces it after triage.</p>
-
     <section aria-labelledby="shortlist-title">
       <div class="section-head"><h2 id="shortlist-title">The shortlist</h2></div>
       <div class="bento catalog-grid" data-slot="shortlist"><p class="placeholder-note">Loading the shortlist…</p></div>
@@ -45,7 +43,9 @@
 
     <section aria-labelledby="how-title">
       <div class="section-head"><h2 id="how-title">How the vote works</h2></div>
+      <p class="section-intro">Ideas are always open. A vote runs for 10 working days at the start of each two-month cycle.</p>
       <ol class="how-list" data-how></ol>
+      <p class="vote-channel" data-channel></p>
     </section>
   </div>
 </main>

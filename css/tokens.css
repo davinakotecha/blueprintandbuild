@@ -97,43 +97,43 @@
   --dot3: #c6ff00;
 }
 
-/* Davina: espresso and butter yellow */
+/* Davina: forest green and slate blue on blush */
 [data-mode="davina"] {
-  color-scheme: dark;
-  /* Surfaces and text. Source: docs/PLAN.md palette table (espresso and butter yellow). */
-  --bg: #2b1d14;
-  --surface: #3a2a1f;
-  --text: #f7eedc;
-  --text2: #cdb9a0;
+  color-scheme: light;
+  /* Surfaces and text. Source: Davina palette supplied 26 Oct 2026 (blush page, sage surface, forest green and slate blue). */
+  --bg: #F4EDEB;
+  --surface: #EEF2EC;
+  --text: #143109;
+  --text2: #44574A;
   /* Accents (fills, rules, particles). Use the -text variants whenever an accent colour is text. */
-  --accent: #f5d77a;
-  --accent2: #d9825b;
-  --hl1: #a3b18a;
-  --hl2: #c68b59;
-  --on-accent: #2b1d14;
-  --on-accent2: #2b1d14;
-  --accent-hover: #f6dd8d;
-  --accent-active: #f8e29f;
+  --accent: #143109;
+  --accent2: #465775;
+  --hl1: #8FA3BE;
+  --hl2: #7B9E87;
+  --on-accent: #F3EEEC;
+  --on-accent2: #FFFFFF;
+  --accent-hover: #1E4812;
+  --accent-active: #0E2309;
   /* Accent colours as text, checked on --bg and --surface (see the report in scripts/tokens.mjs). */
-  --accent-text: #f5d77a;
-  --accent2-text: #d9825b;
-  --eyebrow-text: #d9825b;
-  --tag-bg: #a3b18a;
-  --tag-text: #2b1d14;
-  --tag2-bg: #c68b59;
-  --tag2-text: #2b1d14;
-  --error-text: #ff8389;
-  --success-text: #42be65;
+  --accent-text: #465775;
+  --accent2-text: #44574A;
+  --eyebrow-text: #465775;
+  --tag-bg: #465775;
+  --tag-text: #FFFFFF;
+  --tag2-bg: #F5D0C5;
+  --tag2-text: #143109;
+  --error-text: #A61D16;
+  --success-text: #1A5C34;
   /* Lines, focus, glass, glow and particles. */
-  --line: #523b2b;
-  --line-strong: #8a7866;
-  --focus: #f5d77a;
-  --glass: rgba(58, 42, 31, 0.9);
-  --glow: rgba(245, 215, 122, 0.22);
-  --shadow: rgba(0, 0, 0, 0.45);
-  --dot: #f5d77a;
-  --dot2: #d9825b;
-  --dot3: #c68b59;
+  --line: #E0D3D0;
+  --line-strong: #85726E;
+  --focus: #465775;
+  --glass: rgba(238, 242, 236, 0.86);
+  --glow: rgba(70, 87, 117, 0.22);
+  --shadow: rgba(20, 49, 9, 0.12);
+  --dot: #465775;
+  --dot2: #7B9E87;
+  --dot3: #143109;
 }
 
 /* Mode-independent tokens */

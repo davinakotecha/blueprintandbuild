@@ -31,7 +31,12 @@
   }
 }
 
-/* A card that explains an empty or sample state, full width above the list. */
+/* The Knowledge Share library card: full width, text kept to a readable line. */
+.hall-library p {
+  max-inline-size: var(--measure);
+}
+
+/* A card that explains an empty state, full width above the list. */
 .hall-note {
   margin-block-end: var(--space-6);
 }

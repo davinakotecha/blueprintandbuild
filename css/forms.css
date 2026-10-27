@@ -78,6 +78,13 @@ html[data-tier] .next-card.glass {
   font-size: var(--fs-label-01);
 }
 
+/* The line under the list that points at the idea-to-brief skill. */
+.next-card > .field__hint {
+  margin-block-start: var(--space-6);
+  padding-block-start: var(--space-5);
+  border-block-start: var(--border) solid var(--line);
+}
+
 .next-list strong {
   display: block;
   color: var(--text);
@@ -149,6 +156,28 @@ html[data-tier] .next-card.glass {
 
 .field textarea {
   min-block-size: 9rem;
+}
+
+/* The data question: a fieldset of radios, one per line, each a full-height touch target. */
+.choice {
+  display: grid;
+  gap: var(--space-1);
+  margin: 0;
+}
+
+.choice[aria-invalid='true'] {
+  border-inline-start: var(--space-2) solid var(--error-text);
+  padding-inline-start: var(--space-4);
+}
+
+.choice__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  min-block-size: var(--touch-target);
+  color: var(--text);
+  font-size: var(--fs-body-02);
+  cursor: pointer;
 }
 
 /* A field in error keeps its text colour; the border, the message and the summary carry the state. */

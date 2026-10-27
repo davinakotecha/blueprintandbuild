@@ -3,8 +3,7 @@
  * which MVPs match) and the labelled form that edits that state.
  *
  * State is { q, type, status, tag }, kept in the query string (catalog.html?type=skill&status=live&tag=Data&q=brief).
- * Unknown values are ignored, so a stale or mistyped link still opens the full catalog. The "Sample" tag is a
- * marker, not a topic, so it is never offered as a tag filter.
+ * Unknown values are ignored, so a stale or mistyped link still opens the full catalog.
  */
 import { el, list, labelOf } from './dom.js';
 import { TYPE_LABEL, STATUS_LABEL } from './home-cards.js';
@@ -14,9 +13,9 @@ const TYPE_ORDER = ['code', 'platform', 'skill', 'file'];
 const STATUS_ORDER = ['idea', 'building', 'live', 'retired'];
 const KEYS = ['type', 'status', 'tag', 'q'];
 
-/** An MVP's topic tags (the "Sample" marker left out). */
+/** An MVP's topic tags. */
 export function tagsOf(mvp) {
-  return list(mvp.tags).filter((tag) => tag.toLowerCase() !== 'sample');
+  return list(mvp.tags);
 }
 
 /** The values the data actually uses, in a fixed order for type and status and alphabetical for tags. */
